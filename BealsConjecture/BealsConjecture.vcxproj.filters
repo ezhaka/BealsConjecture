@@ -15,15 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Downloads\beal\bealhash3.cpp">
+    <ClCompile Include="bealhash3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Downloads\beal\ulhash3.cpp">
+    <ClCompile Include="ulhash3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Downloads\beal\ulhash3.h">
+    <ClInclude Include="ulhash3.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

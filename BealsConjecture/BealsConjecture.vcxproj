@@ -18,6 +18,13 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="bealhash3.cpp" />
+    <ClCompile Include="ulhash3.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ulhash3.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CBC55869-76F1-468E-A845-4F6ECE00F006}</ProjectGuid>
     <RootNamespace>BealsConjecture</RootNamespace>
@@ -110,13 +117,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Downloads\beal\bealhash3.cpp" />
-    <ClCompile Include="..\..\..\..\..\Downloads\beal\ulhash3.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Downloads\beal\ulhash3.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
