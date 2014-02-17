@@ -94,11 +94,11 @@ void checkSums() {
 			powy1 = powsp1[y-2];
 			powy2 = powsp2[y-2];
 			
-			for (m=2; m<=maxPow; m++) {
+			for (m=3; m<=maxPow; m++) {
 				xm1 = powx1[m-2];
 				xm2 = powx2[m-2];
 				
-				for (n=2; n<=maxPow; n++) {
+				for (n=3; n<=maxPow; n++) {
 					if (ulhash_opt_find(hp1, (xm1 + powy1[n-2])%largeP1)) {
 						if (ulhash_opt_find(hp2, (xm2 + powy2[n-2])%largeP2)) {
 							numCand++;
