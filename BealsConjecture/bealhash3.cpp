@@ -5,19 +5,21 @@
 #include <cilk\cilk.h>
 #include <time.h>
 
-unsigned long maxPow  = 0;
-unsigned long maxBase = 0;
+typedef unsigned __int64 uint64;
+
+uint64 maxPow  = 0;
+uint64 maxBase = 0;
 unsigned int numCand = 0;
 
 ulhash* hp1;
 ulhash* hp2;
-unsigned long** powsp1;
-unsigned long** powsp2;
+uint64** powsp1;
+uint64** powsp2;
 
-unsigned long largeP1 = 4294967291ULL; //(1<<31) - 5;
-unsigned long largeP2 = 4294967279ULL; //(1<<31) - 17;
+uint64 largeP1 = 4294967291ULL; //(1<<31) - 5;
+uint64 largeP2 = 4294967279ULL; //(1<<31) - 17;
 
-unsigned long gcd(unsigned long u, unsigned long v);
+uint64 gcd(uint64 u, uint64 v);
 void genZs();
 void precomputePows();
 void checkSums();
@@ -30,6 +32,9 @@ int useGcd = 1;
 // We screen through both to get good accuracy w/o the 
 
 int main(int argc, char** argv) {
+
+  printf("sizeof(uint64) = %d\n", sizeof(uint64));
+
   if (argc < 3) {
     fprintf(stderr, "Usage: %s <max power> <max base>\n", argv[0]);
     exit(1);
@@ -81,9 +86,9 @@ int main(int argc, char** argv) {
 // Output each as a candidate if it matches.
 void checkSums() {
 	unsigned int x, y, m, n;
-	unsigned long *powx1, *powy1;
-	unsigned long *powx2, *powy2;
-	unsigned long xm1, xm2;
+	uint64 *powx1, *powy1;
+	uint64 *powx2, *powy2;
+	uint64 xm1, xm2;
 	
 	for (x=2; x<=maxBase; x++) {
 		powx1 = powsp1[x-2];
@@ -117,7 +122,7 @@ void checkSums() {
 // t2 is calculated using machine words, and tp is modulo a largeish prime
 void genZs() {
   int z, r;
-  unsigned long n1, n2;
+  uint64 n1, n2;
   
   // We'll be inserting ~maxBase*maxPow entries into the hash tables
   hp1 = ulhash_create((maxBase-2)*(maxPow-3));
@@ -143,14 +148,14 @@ void genZs() {
 
 // Precompute powers modulo 2^{word size}
 void precomputePows() {
-	powsp1 = (unsigned long**) malloc( (maxBase-1) * sizeof(unsigned long*));
-	powsp2 = (unsigned long**) malloc( (maxBase-1) * sizeof(unsigned long*));
+	powsp1 = (uint64**) malloc( (maxBase-1) * sizeof(uint64*));
+	powsp2 = (uint64**) malloc( (maxBase-1) * sizeof(uint64*));
 	
 	for (int x=2; x<=maxBase; x++) {
-		unsigned long* pxp1 = (unsigned long*) malloc( (maxPow-2) * sizeof(unsigned long));
-		unsigned long* pxp2 = (unsigned long*) malloc( (maxPow-2) * sizeof(unsigned long));
-		unsigned long powxp1 = (x*x) % largeP1;
-		unsigned long powxp2 = (x*x) % largeP2;
+		uint64* pxp1 = (uint64*) malloc( (maxPow-2) * sizeof(uint64));
+		uint64* pxp2 = (uint64*) malloc( (maxPow-2) * sizeof(uint64));
+		uint64 powxp1 = (x*x) % largeP1;
+		uint64 powxp2 = (x*x) % largeP2;
 		powsp1[x-2] = pxp1;
 		powsp2[x-2] = pxp2;
 		
@@ -163,8 +168,8 @@ void precomputePows() {
 	}
 }
 
-unsigned long gcd(unsigned long u, unsigned long v) {
-     unsigned long k = 0;
+uint64 gcd(uint64 u, uint64 v) {
+     uint64 k = 0;
      if (u == 0)
          return v;
      if (v == 0)
