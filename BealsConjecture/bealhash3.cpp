@@ -7,7 +7,9 @@
 
 typedef unsigned __int64 uint64;
 
+uint64 minPow  = 0;
 uint64 maxPow  = 0;
+uint64 minBase = 0;
 uint64 maxBase = 0;
 unsigned int numCand = 0;
 
@@ -50,8 +52,10 @@ int main(int argc, char** argv) {
   	argv++;
   }
   
-  maxBase = atol(argv[1]);
-  maxPow = atol(argv[2]);
+  minBase = atol(argv[1]);
+  maxBase = atol(argv[2]);
+  minPow = atol(argv[3]);
+  maxPow = atol(argv[4]);
 
   clock_t startClock = clock();
 
@@ -90,24 +94,24 @@ void checkSums() {
 	uint64 *powx2, *powy2;
 	uint64 xm1, xm2;
 	
-	for (x=2; x<=maxBase; x++) {
-		powx1 = powsp1[x-2];
-		powx2 = powsp2[x-2];
+	for (x=minBase; x<=maxBase; x++) {
+		powx1 = powsp1[x-minBase];
+		powx2 = powsp2[x-minBase];
 		
-		for (y=2; y<=x; y++) {
+		for (y=minBase; y<=x; y++) {
 			if (useGcd && gcd(x,y) != 1) continue;
-			powy1 = powsp1[y-2];
-			powy2 = powsp2[y-2];
+			powy1 = powsp1[y-minBase];
+			powy2 = powsp2[y-minBase];
 			
-			for (m=3; m<=maxPow; m++) {
-				xm1 = powx1[m-2];
-				xm2 = powx2[m-2];
+			for (m=minPow; m<=maxPow; m++) {
+				xm1 = powx1[m-minPow];
+				xm2 = powx2[m-minPow];
 				
-				for (n=3; n<=maxPow; n++) {
-					if (ulhash_opt_find(hp1, (xm1 + powy1[n-2])%largeP1)) {
-						if (ulhash_opt_find(hp2, (xm2 + powy2[n-2])%largeP2)) {
+				for (n=minPow; n<=maxPow; n++) {
+					if (ulhash_opt_find(hp1, (xm1 + powy1[n-minPow])%largeP1)) {
+						if (ulhash_opt_find(hp2, (xm2 + powy2[n-minPow])%largeP2)) {
 							numCand++;
-							//printf("%u^%u + %u^%u\n", x, m, y, n);
+							printf("%u^%u + %u^%u\n", x, m, y, n);
 						}
 					}
 				}
@@ -125,20 +129,24 @@ void genZs() {
   uint64 n1, n2;
   
   // We'll be inserting ~maxBase*maxPow entries into the hash tables
-  hp1 = ulhash_create((maxBase-2)*(maxPow-3));
-  hp2 = ulhash_create((maxBase-2)*(maxPow-3));
+  uint64 hashsetSize = (maxBase-minBase+1)*(maxPow-minPow+1);
+  hp1 = ulhash_create(hashsetSize);
+  hp2 = ulhash_create(hashsetSize);
   
-  for (z=2; z<=maxBase; z++) {
+  for (z=minBase; z<=maxBase; z++) {
     n1 = z*z;
     n2 = n1 % largeP2;
     n1 = n1 % largeP1;
     
-    for (r=3; r<=maxPow; r++) {
+    for (r=minPow; r<=maxPow; r++) {
+      if (r >= minPow) {
+			  ulhash_set(hp1, n1);
+        //printf("n1 = %d\n", n1);
+        ulhash_set(hp2, n2);
+      }
+
       n1 = (n1*z) % largeP1;
       n2 = (n2*z) % largeP2;
-      
-      ulhash_set(hp1, n1);
-      ulhash_set(hp2, n2);
     }
   }
   
@@ -148,22 +156,27 @@ void genZs() {
 
 // Precompute powers modulo 2^{word size}
 void precomputePows() {
-	powsp1 = (uint64**) malloc( (maxBase-1) * sizeof(uint64*));
-	powsp2 = (uint64**) malloc( (maxBase-1) * sizeof(uint64*));
+  uint64 powspSize = (maxBase-minBase+1) * sizeof(uint64*);
+	powsp1 = new uint64* [maxBase-minBase+1];// (uint64**) malloc( powspSize );
+	powsp2 = new uint64* [maxBase-minBase+1];
 	
-	for (int x=2; x<=maxBase; x++) {
-		uint64* pxp1 = (uint64*) malloc( (maxPow-2) * sizeof(uint64));
-		uint64* pxp2 = (uint64*) malloc( (maxPow-2) * sizeof(uint64));
+	for (int x=minBase; x<=maxBase; x++) {
+    uint64 pxpSize = (maxPow-minPow+1) * sizeof(uint64);
+		uint64* pxp1 = new uint64 [maxPow-minPow+1]; // (uint64*) malloc( pxpSize );
+		uint64* pxp2 = new uint64 [maxPow-minPow+1]; // (uint64*) malloc( pxpSize );
 		uint64 powxp1 = (x*x) % largeP1;
 		uint64 powxp2 = (x*x) % largeP2;
-		powsp1[x-2] = pxp1;
-		powsp2[x-2] = pxp2;
+		powsp1[x-minBase] = pxp1;
+		powsp2[x-minBase] = pxp2;
 		
-		for (int m=3; m<=maxPow; m++) {
-			powxp1 = (powxp1 * x) % largeP1;
+		for (int m=2; m<=maxPow; m++) {
+      if (m >= minPow) {
+			  pxp1[m-minPow] = powxp1;
+			  pxp2[m-minPow] = powxp2;
+      }
+
+      powxp1 = (powxp1 * x) % largeP1;
 			powxp2 = (powxp2 * x) % largeP2;
-			pxp1[m-3] = powxp1;
-			pxp2[m-3] = powxp2;
 		}
 	}
 }
