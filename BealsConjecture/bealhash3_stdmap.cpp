@@ -5,14 +5,8 @@
 #include <cilk\cilk.h>
 #include <time.h>
 #include <map>
-#include <tuple>
 
 typedef unsigned __int64 uint64;
-
-struct powered {
-	uint64 base;
-	uint64 power;
-};
 
 uint64 minPow  = 0;
 uint64 maxPow  = 0;
@@ -23,8 +17,8 @@ unsigned int numCand = 0;
 //ulhash* hp1;
 //ulhash* hp2;
 
-std::map<uint64, std::tuple<uint64, uint64>> hp1;
-std::map<uint64, std::tuple<uint64, uint64>> hp2;
+std::map<uint64, uint64> hp1;
+std::map<uint64, uint64> hp2;
 
 uint64** powsp1;
 uint64** powsp2;
@@ -115,33 +109,21 @@ void checkSums() {
 			powy2 = powsp2[y-minBase];
 			
 			for (m=minPow; m<=maxPow; m++) {
-        //if (!(m%10)) fprintf(stderr,"Completed m=%d\n", m);
 				xm1 = powx1[m-minPow];
 				xm2 = powx2[m-minPow];
 				
 				for (n=minPow; n<=maxPow; n++) {
-        //if (!(n%10)) fprintf(stderr,"Completed n=%d\n", n);
-          auto yn1 = powy1[n-minPow];
-          auto yn2 = powy2[n-minPow];
-          auto hp1res = hp1.find((xm1 + yn1)%largeP1);
+          auto hp1res = hp1.find((xm1 + powy1[n-minPow])%largeP1);
+          auto hp2res = hp2.find((xm2 + powy2[n-minPow])%largeP2);
 
           if (hp1res != hp1.end()) {
-            auto hp2res = hp2.find((xm2 + yn2)%largeP2);
-
 						if (hp2res != hp2.end()) {
-              auto powered1 = hp1res->second;
-              auto powered2 = hp2res->second;
-              
-              if (std::get<0>(powered1) == std::get<0>(powered2)) {
-							  numCand++;
-                printf("%u^%u + %u^%u = %u^%u\n", x, m, y, n, std::get<0>(powered1), std::get<1>(powered1));
-              }
-            }
+							numCand++;
+							printf("%u^%u + %u^%u = %u^r\n", x, m, y, n, hp1res->second);
+						}
 					}
 				}
 			}
-
-      //if (!(y%10)) fprintf(stderr,"Completed y=%d\n", x);
 		}
 		
 		if (!(x%10)) fprintf(stderr,"Completed x=%d\n", x);
@@ -164,12 +146,12 @@ void genZs() {
     n2 = n1 % largeP2;
     n1 = n1 % largeP1;
     
-    for (r=2; r<=maxPow; r++) {
+    for (r=minPow; r<=maxPow; r++) {
       if (r >= minPow) {
-        hp1[n1] = std::make_tuple(z, r);
-        hp2[n2] = std::make_tuple(z, r);
-
+        hp1[n1] = z;
+        hp2[n2] = z;
 			  //ulhash_set(hp1, n1);
+        //printf("n1 = %d\n", n1);
         //ulhash_set(hp2, n2);
       }
 

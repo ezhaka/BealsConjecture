@@ -10,21 +10,24 @@
   <CPUFrequency type="s64_t">2300000000</CPUFrequency>
  </rdmgr>
  <All_Configurations-All_Platforms>
+  <analysis_type_settings>
+   <selected_analysis_type_path>C:\Program Files (x86)\Intel\VTune Amplifier XE 2013\config\analysis_type\basic_hotspots.cfg</selected_analysis_type_path>
+  </analysis_type_settings>
   <target_settings>
    <selected_workload>launch</selected_workload>
    <result_pattern>r@@@{at}</result_pattern>
-   <result_dir>C:\Users\mcgee\documents\visual studio 2010\Projects\BealsConjecture\BealsConjecture\My Amplifier XE Results - BealsConjecture</result_dir>
+   <result_dir>C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture\My Amplifier XE Results - BealsConjecture</result_dir>
    <workloads>
     <launch type="pointer" type_id="dasID_cctrl2::ApplicationWorkload" ptr_type="dasID_cctrl2::IWorkload">
      <workload>
       <targetName>launch</targetName>
-      <result_directory.path>C:\Users\mcgee\documents\visual studio 2010\Projects\BealsConjecture\BealsConjecture\My Amplifier XE Results - BealsConjecture\r@@@{at}</result_directory.path>
-      <system.duration>60</system.duration>
-      <launch_app.resume_after type="s32_t">0</launch_app.resume_after>
+      <system.duration>30</system.duration>
       <launch_app.start_paused type="bool">false</launch_app.start_paused>
-      <launch_app.app_to_launch>C:\Users\mcgee\documents\visual studio 2010\Projects\BealsConjecture\x64\Release\BealsConjecture.exe</launch_app.app_to_launch>
-      <launch_app.working_folder>C:\Users\mcgee\documents\visual studio 2010\Projects\BealsConjecture\BealsConjecture</launch_app.working_folder>
-      <launch_app.app_parameters>-v 1000 1000</launch_app.app_parameters>
+      <launch_app.resume_after type="s32_t">0</launch_app.resume_after>
+      <result_directory.path>C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture\My Amplifier XE Results - BealsConjecture\r@@@{at}</result_directory.path>
+      <launch_app.app_to_launch>C:\Users\mcgee\Documents\GitHub\BealsConjecture\x64\Debug\BealsConjecture.exe</launch_app.app_to_launch>
+      <launch_app.working_folder>C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture</launch_app.working_folder>
+      <launch_app.app_parameters>2 1000 3 100</launch_app.app_parameters>
       <launch_app.environment_prepend>PATH=C:\Program Files (x86)\Intel\Composer XE 2013 SP1\redist\intel64\compiler;</launch_app.environment_prepend>
       <context>
        <contextValue>
@@ -70,10 +73,10 @@
       </context>
       <search_directories>
        <item>
-        <value>sym=C:\Users\mcgee\documents\visual studio 2010\Projects\BealsConjecture\x64\Release</value>
+        <value>sym=C:\Users\mcgee\Documents\GitHub\BealsConjecture\x64\Debug</value>
        </item>
        <item>
-        <value>sym=C:\Users\mcgee\documents\visual studio 2010\Projects\BealsConjecture</value>
+        <value>sym=C:\Users\mcgee\Documents\GitHub\BealsConjecture</value>
        </item>
       </search_directories>
      </workload>
@@ -82,7 +85,7 @@
      <workload>
       <targetName>attach</targetName>
       <attach.process_name>BealsConjecture.exe</attach.process_name>
-      <result_directory.path>C:\Users\mcgee\documents\visual studio 2010\Projects\BealsConjecture\BealsConjecture\My Amplifier XE Results - BealsConjecture\r@@@{at}</result_directory.path>
+      <result_directory.path>C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture\My Amplifier XE Results - BealsConjecture\r@@@{at}</result_directory.path>
       <context>
        <contextValue>
         <id>allowMultipleRuns</id>
@@ -131,7 +134,7 @@
      <workload>
       <targetName>system</targetName>
       <use_app_dir_as_work_dir type="bool">false</use_app_dir_as_work_dir>
-      <result_directory.path>C:\Users\mcgee\documents\visual studio 2010\Projects\BealsConjecture\BealsConjecture\My Amplifier XE Results - BealsConjecture\r@@@{at}</result_directory.path>
+      <result_directory.path>C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture\My Amplifier XE Results - BealsConjecture\r@@@{at}</result_directory.path>
      </workload>
     </system>
    </workloads>
@@ -150,9 +153,6 @@
     <category type="u8_t">4</category>
    </searchCategory>
   </searchDirs>
-  <analysis_type_settings>
-   <selected_analysis_type_path>C:\Program Files (x86)\Intel\VTune Amplifier XE 2013\config\analysis_type\snb_memory_access.cfg</selected_analysis_type_path>
-  </analysis_type_settings>
  </All_Configurations-All_Platforms>
  <engine>
   <knobs>
