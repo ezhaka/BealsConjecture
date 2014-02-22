@@ -4,15 +4,7 @@
 #include "ulhash3.h"
 #include <cilk\cilk.h>
 #include <time.h>
-#include <map>
-#include <tuple>
-
-typedef unsigned __int64 uint64;
-
-struct powered {
-	uint64 base;
-	uint64 power;
-};
+#include "ulhashHashtable.h"
 
 uint64 minPow  = 0;
 uint64 maxPow  = 0;
@@ -23,8 +15,8 @@ unsigned int numCand = 0;
 //ulhash* hp1;
 //ulhash* hp2;
 
-std::map<uint64, std::tuple<uint64, uint64>> hp1;
-std::map<uint64, std::tuple<uint64, uint64>> hp2;
+UlhashHashtable hp1;
+UlhashHashtable hp2;
 
 uint64** powsp1;
 uint64** powsp2;
@@ -32,11 +24,17 @@ uint64** powsp2;
 uint64 largeP1 = 4294967291ULL; //(1<<31) - 5;
 uint64 largeP2 = 4294967279ULL; //(1<<31) - 17;
 
+clock_t startClock;
+void startTimer();
+void stopTimerAndPrint();
+
 uint64 gcd(uint64 u, uint64 v);
 void genZs();
 void precomputePows();
 void checkSums();
 int checkModPrime(int x, int m, int y, int n);
+void addValue(uint64 key, std::tuple<uint64, uint64> val);
+bool tryGetValue(uint64 key, std::tuple<uint64, uint64> & val);
 int verbose = 0;
 int useGcd = 1;
 
@@ -68,7 +66,7 @@ int main(int argc, char** argv) {
   minPow = atol(argv[3]);
   maxPow = atol(argv[4]);
 
-  clock_t startClock = clock();
+  
 
   // Generate the possible z^r values and put them in the trie
   if (verbose) printf("Generating all combinations of z^r...\n");
@@ -88,9 +86,6 @@ int main(int argc, char** argv) {
   
   // Check each sum for inclusion in the table modulo 2^(word size)
   checkSums();
-
-  clock_t endClock = clock();
-  printf("Elapsed: %f seconds\n", (double)(endClock - startClock) / CLOCKS_PER_SEC);
   
   printf("Finished. A total of %d candidates were found.\n", numCand);
 
@@ -104,6 +99,8 @@ void checkSums() {
 	uint64 *powx1, *powy1;
 	uint64 *powx2, *powy2;
 	uint64 xm1, xm2;
+
+  startTimer();
 	
 	for (x=minBase; x<=maxBase; x++) {
 		powx1 = powsp1[x-minBase];
@@ -123,18 +120,15 @@ void checkSums() {
         //if (!(n%10)) fprintf(stderr,"Completed n=%d\n", n);
           auto yn1 = powy1[n-minPow];
           auto yn2 = powy2[n-minPow];
-          auto hp1res = hp1.find((xm1 + yn1)%largeP1);
 
-          if (hp1res != hp1.end()) {
-            auto hp2res = hp2.find((xm2 + yn2)%largeP2);
+          std::tuple<uint64, uint64> hp1res;
+          std::tuple<uint64, uint64> hp2res;
 
-						if (hp2res != hp2.end()) {
-              auto powered1 = hp1res->second;
-              auto powered2 = hp2res->second;
-              
-              if (std::get<0>(powered1) == std::get<0>(powered2)) {
+          if (hp1.tryGetValue((xm1 + yn1)%largeP1, hp1res)) {
+						if (hp2.tryGetValue((xm2 + yn2)%largeP2, hp2res)) {
+              if (std::get<0>(hp1res) == std::get<0>(hp2res)) {
 							  numCand++;
-                printf("%u^%u + %u^%u = %u^%u\n", x, m, y, n, std::get<0>(powered1), std::get<1>(powered1));
+                printf("%u^%u + %u^%u = %u^%u\n", x, m, y, n, std::get<0>(hp1res), std::get<1>(hp1res));
               }
             }
 					}
@@ -144,7 +138,13 @@ void checkSums() {
       //if (!(y%10)) fprintf(stderr,"Completed y=%d\n", x);
 		}
 		
-		if (!(x%10)) fprintf(stderr,"Completed x=%d\n", x);
+		if (!(x%10)) {
+      printf("Completed x=%d\n", x);
+      fprintf(stderr,"Completed x=%d\n", x);
+
+      stopTimerAndPrint();
+      startTimer();
+    }
 	}
 }
 
@@ -158,6 +158,8 @@ void genZs() {
   uint64 hashsetSize = (maxBase-minBase+1)*(maxPow-minPow+1);
   //hp1 = ulhash_create(hashsetSize);
   //hp2 = ulhash_create(hashsetSize);
+  hp1 = UlhashHashtable(hashsetSize);
+  hp2 = UlhashHashtable(hashsetSize);
   
   for (z=minBase; z<=maxBase; z++) {
     n1 = z*z;
@@ -166,8 +168,8 @@ void genZs() {
     
     for (r=2; r<=maxPow; r++) {
       if (r >= minPow) {
-        hp1[n1] = std::make_tuple(z, r);
-        hp2[n2] = std::make_tuple(z, r);
+        hp1.addValue(n1, std::make_tuple(z, r));
+        hp2.addValue(n2, std::make_tuple(z, r));
 
 			  //ulhash_set(hp1, n1);
         //ulhash_set(hp2, n2);
@@ -178,6 +180,8 @@ void genZs() {
     }
   }
   
+  hp1.optimize();
+  hp2.optimize();
   //ulhash_opt(hp1);
   //ulhash_opt(hp2);
 }
@@ -209,6 +213,7 @@ void precomputePows() {
 	}
 }
 
+
 uint64 gcd(uint64 u, uint64 v) {
      uint64 k = 0;
      if (u == 0)
@@ -233,3 +238,14 @@ uint64 gcd(uint64 u, uint64 v) {
      } while (u > 0);
      return v << k;  /* returns v * 2^k */
  }
+
+void startTimer()
+{
+  startClock = clock();
+}
+
+void stopTimerAndPrint()
+{
+  clock_t endClock = clock();
+  printf("Elapsed: %f seconds\n", (double)(endClock - startClock) / CLOCKS_PER_SEC);
+}

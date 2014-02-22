@@ -21,9 +21,15 @@
     <ClCompile Include="ulhash3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="hashtable.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ulhash3.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ulhashHashtable.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

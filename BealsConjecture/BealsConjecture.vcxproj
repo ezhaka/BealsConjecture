@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bealhash3.cpp" />
+    <ClCompile Include="hashtable.h" />
     <ClCompile Include="ulhash3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ulhash3.h" />
+    <ClInclude Include="ulhashHashtable.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CBC55869-76F1-468E-A845-4F6ECE00F006}</ProjectGuid>
