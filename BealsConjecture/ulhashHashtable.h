@@ -18,10 +18,10 @@ public:
     ulhash_set(hashtable, key);
   }
 
-  bool tryGetValue(uint64 key, std::tuple<uint64, uint64> & val)
+  bool tryGetValue(uint64 key)
   {
     bool result = ulhash_opt_find(hashtable, key); 
-    val = std::make_tuple(0, 0);
+    //val = std::make_tuple(0, 0);
 
     return result;
   }

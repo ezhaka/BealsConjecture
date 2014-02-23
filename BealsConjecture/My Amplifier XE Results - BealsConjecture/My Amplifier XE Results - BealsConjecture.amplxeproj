@@ -21,13 +21,13 @@
     <launch type="pointer" type_id="dasID_cctrl2::ApplicationWorkload" ptr_type="dasID_cctrl2::IWorkload">
      <workload>
       <targetName>launch</targetName>
-      <system.duration>30</system.duration>
-      <launch_app.start_paused type="bool">false</launch_app.start_paused>
-      <launch_app.resume_after type="s32_t">0</launch_app.resume_after>
       <result_directory.path>C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture\My Amplifier XE Results - BealsConjecture\r@@@{at}</result_directory.path>
+      <system.duration>30</system.duration>
+      <launch_app.resume_after type="s32_t">0</launch_app.resume_after>
+      <launch_app.start_paused type="bool">false</launch_app.start_paused>
       <launch_app.app_to_launch>C:\Users\mcgee\Documents\GitHub\BealsConjecture\x64\Debug\BealsConjecture.exe</launch_app.app_to_launch>
       <launch_app.working_folder>C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture</launch_app.working_folder>
-      <launch_app.app_parameters>2 1000 3 100</launch_app.app_parameters>
+      <launch_app.app_parameters>-v 1000 2000 1000000 1000</launch_app.app_parameters>
       <launch_app.environment_prepend>PATH=C:\Program Files (x86)\Intel\Composer XE 2013 SP1\redist\intel64\compiler;</launch_app.environment_prepend>
       <context>
        <contextValue>

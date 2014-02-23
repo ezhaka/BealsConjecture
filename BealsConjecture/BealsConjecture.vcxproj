@@ -99,6 +99,8 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <Cpp0xSupport>false</Cpp0xSupport>
+      <C99Support>false</C99Support>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
