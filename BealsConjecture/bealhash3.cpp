@@ -14,9 +14,6 @@ uint64 maxPow  = 0;
 uint64 maxBase = 0;
 
 uint64 savedX = 0;
-uint64 savedY = 0;
-uint64 savedN = 0;
-uint64 savedM = 0;
 uint64 savedZ = 0;
 
 unsigned int numCand = 0;
@@ -41,10 +38,11 @@ void stopTimerAndPrint();
 uint64 gcd(uint64 u, uint64 v);
 void genZs(uint64 from, uint64 to);
 void precomputePows();
-void checkSums(int fromX, int toX, int fromY, int fromM, int fromN);
+void checkSums(int fromX, int toX);
 int checkModPrime(int x, int m, int y, int n);
 void addValue(uint64 key, std::tuple<uint64, uint64> val);
 bool tryGetValue(uint64 key, std::tuple<uint64, uint64> & val);
+void logCurrentTime();
 int verbose = 0;
 int useGcd = 1;
 
@@ -77,31 +75,27 @@ int main(int argc, char** argv) {
   maxPow = atol(argv[4]);
 
   savedX = 2;
-  savedY = 2;
   savedZ = 2;
-  savedN = 3;
-  savedM = 3;
 
   readLogFile();
   oLogFile.open(logFileName, std::ios::app);
 
   int zStep = 10000;
-
-  int fromZ = savedZ == 2 ? 1 : (savedZ / zStep);
+  int fromZ = savedZ == 2 ? 1 : ((savedZ / zStep) + 1);
 
   for (uint64 z = fromZ; z <= maxBase / zStep; z++)
   {
-    if (verbose) printf("Generating all combinations of z^r...\n");
-    genZs(z < 2 ? 2 : ((z - 1) * zStep), z * zStep);
+    genZs((z - 1) * zStep, z * zStep);
 
     if (verbose) printf("Done. Searching for candidates...\n");
   
     // Check each sum for inclusion in the table modulo 2^(word size)
-    checkSums(savedZ == 2 ? fromX : savedX,
-      toX);
+    checkSums(z == fromZ ? savedX : fromX, toX);
   
     printf("Finished. A total of %d candidates were found.\n", numCand);
 
+    hp1.free();
+    hp2.free();
     oLogFile << "z=" << z * zStep << std::endl << std::flush;
   }
   //getchar();
@@ -155,7 +149,6 @@ void checkSums(int fromX, int toX) {
 			  powyp2 = (powyp2 * x) % largeP2;
 		  }
 
-
 			for (m = 3; m<=maxPow; m++) {
 				for (n = 3; n<=maxPow; n++) {
           auto xm1 = pxp1[m-3];
@@ -197,6 +190,14 @@ void checkSums(int fromX, int toX) {
 // Initialize the two tries, and generate z^r for each z&r in range
 // t2 is calculated using machine words, and tp is modulo a largeish prime
 void genZs(uint64 from, uint64 to) {
+
+  if (verbose) printf("Generating all combinations of z^r...\n");
+  oLogFile << "Generating all combinations of z^r..." << std::endl;
+  oLogFile << "from z = " << from << std::endl;
+  oLogFile << "to z = " << to << std::endl;
+  std::cout << "Generating z from " << from << " to " << to << std::endl;
+  logCurrentTime();
+
   int z, r;
   uint64 n1, n2;
   
@@ -311,25 +312,33 @@ void readLogFile()
   std::string line;
   std::string zString;
   std::string xString;
-  std::string yString;
-  std::string nString;
-  std::string mString;
 
   // read log
   while (std::getline(iLogFile, line))
   {
     tryGetValueLine("z=", zString, line);
     tryGetValueLine("x=", xString, line);
-    tryGetValueLine("y=", yString, line);
-    tryGetValueLine("n=", nString, line);
-    tryGetValueLine("m=", mString, line);
   }
 
   parseVal(zString, savedZ);
   parseVal(xString, savedX);
-  parseVal(yString, savedY);
-  parseVal(nString, savedN);
-  parseVal(mString, savedM);
   
   iLogFile.close();
+}
+
+const std::string currentDateTime() {
+  time_t     now = time(0);
+  struct tm  tstruct;
+  char       buf[80];
+  tstruct = *localtime(&now);
+  // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
+  // for more information about date/time format
+  strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+
+  return buf;
+}
+
+void logCurrentTime()
+{
+  oLogFile << "now is " << currentDateTime() << std::endl << std::flush;
 }

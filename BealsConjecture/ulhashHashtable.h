@@ -31,6 +31,11 @@ public:
     ulhash_opt(hashtable);
   }
 
+  void free()
+  {
+    ulhash_free(hashtable);
+  }
+
 private:
   ulhash* hashtable;
 };
