@@ -39,9 +39,6 @@ uint64 gcd(uint64 u, uint64 v);
 void genZs(uint64 from, uint64 to);
 void precomputePows();
 void checkSums(int fromX, int toX);
-int checkModPrime(int x, int m, int y, int n);
-void addValue(uint64 key, std::tuple<uint64, uint64> val);
-bool tryGetValue(uint64 key, std::tuple<uint64, uint64> & val);
 void logCurrentTime();
 int verbose = 0;
 int useGcd = 1;
@@ -74,7 +71,7 @@ int main(int argc, char** argv) {
   maxBase = atol(argv[3]);
   maxPow = atol(argv[4]);
 
-  savedX = 2;
+  savedX = fromX;
   savedZ = 2;
 
   readLogFile();
@@ -112,11 +109,35 @@ uint64 modularPow(uint64 base, uint64 pow, uint64 modulo)
   return result;
 }
 
+void checkValues(uint64 x, uint64 m, uint64 y, uint64 n, std::vector<std::tuple<uint64, uint64>> zrs1, std::vector<std::tuple<uint64, uint64>> zrs2)
+{
+  for (auto zr1 = zrs1.begin(); zr1 != zrs1.end(); zr1++) {
+    auto zr1tuple = *zr1;
+    uint64 z = std::get<0>(zr1tuple);
+
+    if (gcd(x, z) == 1 && gcd(y, z) == 1) {
+      numCand++;
+      printf("%u^%u + %u^%u\n", x, m, y, n);
+      oLogFile << x << "^" << m << " + " << y << "^" << n << " = " << z << "^" << std::get<1>(zr1tuple) << std::endl;
+    }
+  }
+
+  for (auto zr2 = zrs2.begin(); zr2 != zrs2.end(); zr2++) {
+    auto zr2tuple = *zr2;
+    uint64 z = std::get<0>(zr2tuple);
+
+    if (gcd(x, z) == 1 && gcd(y, z) == 1) {
+      numCand++;
+      printf("%u^%u + %u^%u\n", x, m, y, n);
+      oLogFile << x << "^" << m << " + " << y << "^" << n << " = " << z << "^" << std::get<1>(zr2tuple) << std::endl;
+    }
+  }
+}
+
 // Check each x^m + y^n w/ gcd(m,n)==1 for inclusion in the trie
 // Output each as a candidate if it matches.
 void checkSums(int fromX, int toX) {
 	unsigned int x, y, m, n;
-
   startTimer();
 	
  	for (x=fromX; x<=toX; x++) {
@@ -153,15 +174,15 @@ void checkSums(int fromX, int toX) {
 				for (n = 3; n<=maxPow; n++) {
           auto xm1 = pxp1[m-3];
           auto yn1 = pyp1[n-3];
+          auto hp1Key = (xm1 + yn1)%largeP1;
 
-          if (hp1.tryGetValue((xm1 + yn1)%largeP1)) {
+          if (hp1.hasKey(hp1Key)) {
             auto xm2 = pxp2[m-3];
             auto yn2 = pyp2[n-3];
+            auto hp2Key = (xm2 + yn2)%largeP2;
 
-						if (hp2.tryGetValue((xm2 + yn2)%largeP2)) {
-							numCand++;
-              printf("%u^%u + %u^%u\n", x, m, y, n);
-              oLogFile << x << "^" << m << " + " << y << "^" << n << std::endl;
+						if (hp2.hasKey(hp1Key)) {
+              checkValues(x, m, y, n, hp1.getValues(hp1Key), hp2.getValues(hp2Key));
             }
 					}
 				}
@@ -172,7 +193,7 @@ void checkSums(int fromX, int toX) {
       delete[] pyp1;
       delete[] pyp2;
 
-      if (!(y%100)) {
+      if (!(y%1000)) {
         oLogFile << "y=" << y << std::endl << std::flush;
       }
 		}

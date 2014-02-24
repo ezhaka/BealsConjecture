@@ -1,5 +1,8 @@
 #include "hashtable.h"
 #include "ulhash3.h"
+#include <map>
+#include <tuple>
+#include <vector>
 
 class UlhashHashtable
 {
@@ -18,12 +21,16 @@ public:
     ulhash_set(hashtable, key);
   }
 
-  bool tryGetValue(uint64 key)
+  bool hasKey(uint64 key)
   {
     bool result = ulhash_opt_find(hashtable, key); 
-    //val = std::make_tuple(0, 0);
 
     return result;
+  }
+
+  std::vector<std::tuple<uint64, uint64>> getValues(uint64 key)
+  {
+    return stdMap[key];
   }
 
   void optimize()
@@ -34,8 +41,10 @@ public:
   void free()
   {
     ulhash_free(hashtable);
+    stdMap.clear();
   }
 
 private:
   ulhash* hashtable;
+  std::map<uint64, std::vector<std::tuple<uint64, uint64>>> stdMap;
 };
