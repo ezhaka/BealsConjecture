@@ -24,8 +24,15 @@
     <ClCompile Include="ulhash3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="sparsehash\densehashtable.h" />
+    <ClInclude Include="sparsehash\hashtable-common.h" />
+    <ClInclude Include="sparsehash\libc_allocator_with_realloc.h" />
+    <ClInclude Include="sparsehash\sparsehashtable.h" />
     <ClInclude Include="ulhash3.h" />
     <ClInclude Include="ulhashHashtable.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dense_hash_map" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CBC55869-76F1-468E-A845-4F6ECE00F006}</ProjectGuid>

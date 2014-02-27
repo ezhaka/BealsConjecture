@@ -10,23 +10,20 @@
 #include "ulhashHashtable.h"
 #include <cstdio>
 
-uint64 maxPow  = 0;
-uint64 maxBase = 0;
-
-uint64 savedX = 0;
-uint64 savedZ = 0;
+#include <sparsehash/internal/sparseconfig.h>
+#include <config.h>
+#include <sparsehash/sparse_hash_set>
+#include <sparsehash/sparse_hash_map>
+#include <sparsehash/dense_hash_set>
+#include <sparsehash/dense_hash_map>
+#include <sparsehash/template_util.h>
+#include <sparsehash/type_traits.h>
 
 unsigned int numCand = 0;
 
 std::ofstream oLogFile;
 std::string logFileName = "logfile.txt";
-void readLogFile();
-
-UlhashHashtable hp1;
-UlhashHashtable hp2;
-
-uint64** powsp1;
-uint64** powsp2;
+std::tuple<uint64, uint64> readLogFile(int defaultZ, int defaultX);
 
 uint64 largeP1 = 4294967291ULL; //(1<<31) - 5;
 uint64 largeP2 = 4294967279ULL; //(1<<31) - 17;
@@ -36,18 +33,17 @@ void startTimer();
 void stopTimerAndPrint();
 
 uint64 gcd(uint64 u, uint64 v);
-void genZs(uint64 from, uint64 to);
-void precomputePows();
-void checkSums(int fromX, int toX);
 void logCurrentTime();
 int verbose = 0;
 int useGcd = 1;
 
-// Use two tries -- one is the Z^r modulo 2^(word size)
-// the other is modulo a large prime, ~2^(half word size)
-// We screen through both to get good accuracy w/o the 
+void checkValues(uint64 x, uint64 m, uint64 y, uint64 n, std::vector<std::tuple<uint64, uint64>> zrs1, std::vector<std::tuple<uint64, uint64>> zrs2);
+void checkSums(int fromX, int toX, int maxPow, std::tuple<UlhashHashtable, UlhashHashtable> hashtables);
+std::tuple<UlhashHashtable, UlhashHashtable> genZs(uint64 from, uint64 to, uint64 maxBase, uint64 maxPow);
 
 int main(int argc, char** argv) {
+  google::dense_hash_map<int, int> dmap;
+
   printf("sizeof(uint64) = %d\n", sizeof(uint64));
 
   if (argc < 3) {
@@ -68,13 +64,13 @@ int main(int argc, char** argv) {
   int fromX = atol(argv[1]);
   int toX = atol(argv[2]);
 
-  maxBase = atol(argv[3]);
-  maxPow = atol(argv[4]);
+  int maxBase = atol(argv[3]);
+  int maxPow = atol(argv[4]);
 
-  savedX = fromX;
-  savedZ = 2;
+  auto savedState = readLogFile(2, fromX);
+  int savedZ = std::get<0>(savedState);
+  int savedX = std::get<1>(savedState);
 
-  readLogFile();
   oLogFile.open(logFileName, std::ios::app);
 
   int zStep = 10000;
@@ -82,17 +78,15 @@ int main(int argc, char** argv) {
 
   for (uint64 z = fromZ; z <= maxBase / zStep; z++)
   {
-    genZs((z - 1) * zStep, z * zStep);
+    auto hashtables = genZs((z - 1) * zStep, z * zStep, maxBase, maxPow);
 
-    if (verbose) printf("Done. Searching for candidates...\n");
+    printf("Done. Searching for candidates...\n");
+    checkSums(z == fromZ ? savedX : fromX, toX, maxPow, hashtables);
   
-    // Check each sum for inclusion in the table modulo 2^(word size)
-    checkSums(z == fromZ ? savedX : fromX, toX);
-  
+    std::get<0>(hashtables).free();
+    std::get<1>(hashtables).free();
+
     printf("Finished. A total of %d candidates were found.\n", numCand);
-
-    hp1.free();
-    hp2.free();
     oLogFile << "z=" << z * zStep << std::endl << std::flush;
   }
   //getchar();
@@ -136,9 +130,12 @@ void checkValues(uint64 x, uint64 m, uint64 y, uint64 n, std::vector<std::tuple<
 
 // Check each x^m + y^n w/ gcd(m,n)==1 for inclusion in the trie
 // Output each as a candidate if it matches.
-void checkSums(int fromX, int toX) {
+void checkSums(int fromX, int toX, int maxPow, std::tuple<UlhashHashtable, UlhashHashtable> hashtables) {
 	unsigned int x, y, m, n;
   startTimer();
+
+  UlhashHashtable hp1 = std::get<0>(hashtables);
+  UlhashHashtable hp2 = std::get<1>(hashtables);
 	
  	for (x=fromX; x<=toX; x++) {
 		for (y = 2; y<=x; y++) {
@@ -170,11 +167,11 @@ void checkSums(int fromX, int toX) {
 			  powyp2 = (powyp2 * x) % largeP2;
 		  }
 
-			for (m = 3; m<=maxPow; m++) {
-				for (n = 3; n<=maxPow; n++) {
+			for (m = 3; m <= maxPow; m++) {
+				for (n = 3; n <= maxPow; n++) {
           auto xm1 = pxp1[m-3];
           auto yn1 = pyp1[n-3];
-          auto hp1Key = (xm1 + yn1)%largeP1;
+          auto hp1Key = (xm1 + yn1) % largeP1;
 
           if (hp1.hasKey(hp1Key)) {
             auto xm2 = pxp2[m-3];
@@ -208,72 +205,38 @@ void checkSums(int fromX, int toX) {
 	}
 }
 
-// Initialize the two tries, and generate z^r for each z&r in range
-// t2 is calculated using machine words, and tp is modulo a largeish prime
-void genZs(uint64 from, uint64 to) {
-
+std::tuple<UlhashHashtable, UlhashHashtable> genZs(uint64 from, uint64 to, uint64 maxBase, uint64 maxPow) 
+{
   if (verbose) printf("Generating all combinations of z^r...\n");
   oLogFile << "Generating all combinations of z^r..." << std::endl;
   oLogFile << "from z = " << from << std::endl;
   oLogFile << "to z = " << to << std::endl;
   std::cout << "Generating z from " << from << " to " << to << std::endl;
   logCurrentTime();
-
-  int z, r;
-  uint64 n1, n2;
   
-  // We'll be inserting ~maxBase*maxPow entries into the hash tables
   uint64 hashsetSize = (to-from+1)*(maxPow-3+1);
-  hp1 = UlhashHashtable(hashsetSize);
-  hp2 = UlhashHashtable(hashsetSize);
+
+  UlhashHashtable hashtable1 = UlhashHashtable(hashsetSize); 
+  UlhashHashtable hashtable2 = UlhashHashtable(hashsetSize); 
   
-  for (z=from; z<=to; z++) {
-    n1 = z*z;
-    n2 = n1 % largeP2;
+  for (uint64 z=from; z<=to; z++) {
+    uint64 n1 = z*z;
+    uint64 n2 = n1 % largeP2;
     n1 = n1 % largeP1;
     
-    for (r=2; r<=maxPow; r++) {
-      hp1.addValue(n1, std::make_tuple(z, r));
-      hp2.addValue(n2, std::make_tuple(z, r));
+    for (uint64 r=2; r<=maxPow; r++) {
+      hashtable1.addValue(n1, std::make_tuple(z, r));
+      hashtable2.addValue(n2, std::make_tuple(z, r));
 
       n1 = (n1*z) % largeP1;
       n2 = (n2*z) % largeP2;
     }
   }
   
-  hp1.optimize();
-  hp2.optimize();
+  hashtable1.optimize();
+  hashtable2.optimize();
+  return std::make_tuple(hashtable1, hashtable2);
 }
-
-// Precompute powers modulo 2^{word size}
-void precomputePows() {
-  uint64 powspSize = (maxBase-2+1) * sizeof(uint64*);
-	powsp1 = new uint64* [maxBase-2+1];// (uint64**) malloc( powspSize );
-	powsp2 = new uint64* [maxBase-2+1];
-	
-	for (int x=2; x<=maxBase; x++) {
-    uint64 pxpSize = (maxPow-3+1) * sizeof(uint64);
-		uint64* pxp1 = new uint64 [maxPow-3+1]; // (uint64*) malloc( pxpSize );
-		uint64* pxp2 = new uint64 [maxPow-3+1]; // (uint64*) malloc( pxpSize );
-		uint64 powxp1 = (x*x) % largeP1;
-		uint64 powxp2 = (x*x) % largeP2;
-		powsp1[x-2] = pxp1;
-		powsp2[x-2] = pxp2;
-		
-		for (int m=2; m<=maxPow; m++) {
-      int minPow = 3;
-
-      if (m >= minPow) {
-			  pxp1[m-minPow] = powxp1;
-			  pxp2[m-minPow] = powxp2;
-      }
-
-      powxp1 = (powxp1 * x) % largeP1;
-			powxp2 = (powxp2 * x) % largeP2;
-		}
-	}
-}
-
 
 uint64 gcd(uint64 u, uint64 v) {
      uint64 k = 0;
@@ -319,15 +282,17 @@ void tryGetValueLine(std::string varName, std::string & valLine, std::string lin
   }
 }
 
-void parseVal(std::string line, uint64 & val)
+int parseVal(std::string line, int defaultValue)
 {
   if (line.length() > 0)
   {
-    val = atoi(line.c_str());
+    return atoi(line.c_str());
   }
+
+  return defaultValue;
 }
 
-void readLogFile()
+std::tuple<uint64, uint64> readLogFile(int defaultZ, int defaultX)
 {
   std::ifstream iLogFile(logFileName);
   std::string line;
@@ -341,10 +306,15 @@ void readLogFile()
     tryGetValueLine("x=", xString, line);
   }
 
-  parseVal(zString, savedZ);
-  parseVal(xString, savedX);
+  int savedZ;
+  int savedX;
+
+  savedZ = parseVal(zString, 2);
+  savedX = parseVal(xString, 2);
   
   iLogFile.close();
+
+  return std::make_tuple(savedZ, savedX);
 }
 
 const std::string currentDateTime() {

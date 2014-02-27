@@ -32,5 +32,22 @@
     <ClInclude Include="ulhashHashtable.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="sparsehash\densehashtable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sparsehash\hashtable-common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sparsehash\libc_allocator_with_realloc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sparsehash\sparsehashtable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dense_hash_map">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

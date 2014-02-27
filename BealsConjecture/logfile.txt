@@ -1,16 +1,355 @@
 Generating all combinations of z^r...
 from z = 0
-to z = Generating all combinations of z^r...10000Generating all combinations of z^r...
-
-
-from z = Generating all combinations of z^r...from z = 
-50000
-10000from z = 20000to z = 
-60000
-
-to z = 20000to z = 
-30000
-now is 2014-02-24.21:58:01
-now is 2014-02-24.21:58:01
-now is 2014-02-24.21:58:01
-now is 2014-02-24.21:58:01
+to z = 10000
+now is 2014-02-25.21:33:55
+x=1000
+y=1000
+y=1000
+y=1000
+y=1000
+x=1010
+y=1000
+y=1000
+y=1000
+y=1000
+x=1020
+y=1000
+y=1000
+y=1000
+y=1000
+x=1030
+y=1000
+y=1000
+y=1000
+y=1000
+x=1040
+y=1000
+y=1000
+y=1000
+y=1000
+x=1050
+y=1000
+y=1000
+y=1000
+Generating all combinations of z^r...
+from z = 0
+to z = 10000
+now is 2014-02-25.21:35:08
+x=1050
+y=1000
+y=1000
+y=1000
+y=1000
+x=1060
+y=1000
+y=1000
+y=1000
+y=1000
+x=1070
+y=1000
+y=1000
+y=1000
+y=1000
+x=1080
+y=1000
+y=1000
+y=1000
+y=1000
+x=1090
+y=1000
+y=1000
+y=1000
+y=1000
+x=1100
+z=10000
+Generating all combinations of z^r...
+from z = 10000
+to z = 20000
+now is 2014-02-25.21:35:17
+x=1000
+y=1000
+y=1000
+y=1000
+y=1000
+x=1010
+y=1000
+y=1000
+y=1000
+y=1000
+x=1020
+y=1000
+y=1000
+y=1000
+y=1000
+x=1030
+y=1000
+y=1000
+y=1000
+y=1000
+x=1040
+y=1000
+y=1000
+y=1000
+y=1000
+x=1050
+y=1000
+y=1000
+y=1000
+y=1000
+x=1060
+y=1000
+y=1000
+y=1000
+y=1000
+x=1070
+y=1000
+y=1000
+y=1000
+y=1000
+x=1080
+y=1000
+y=1000
+y=1000
+y=1000
+x=1090
+y=1000
+y=1000
+y=1000
+y=1000
+x=1100
+z=20000
+Generating all combinations of z^r...
+from z = 20000
+to z = 30000
+now is 2014-02-25.21:35:32
+x=1000
+y=1000
+y=1000
+y=1000
+y=1000
+x=1010
+y=1000
+y=1000
+y=1000
+y=1000
+x=1020
+y=1000
+y=1000
+y=1000
+y=1000
+x=1030
+y=1000
+y=1000
+y=1000
+y=1000
+x=1040
+y=1000
+y=1000
+y=1000
+y=1000
+x=1050
+y=1000
+y=1000
+y=1000
+y=1000
+x=1060
+y=1000
+y=1000
+y=1000
+y=1000
+x=1070
+y=1000
+y=1000
+y=1000
+y=1000
+x=1080
+y=1000
+y=1000
+y=1000
+y=1000
+x=1090
+y=1000
+y=1000
+y=1000
+y=1000
+x=1100
+z=30000
+Generating all combinations of z^r...
+from z = 30000
+to z = 40000
+now is 2014-02-25.21:35:48
+x=1000
+y=1000
+y=1000
+y=1000
+y=1000
+x=1010
+y=1000
+y=1000
+y=1000
+y=1000
+x=1020
+y=1000
+y=1000
+y=1000
+y=1000
+x=1030
+y=1000
+y=1000
+y=1000
+y=1000
+x=1040
+y=1000
+y=1000
+y=1000
+y=1000
+x=1050
+y=1000
+y=1000
+y=1000
+y=1000
+x=1060
+y=1000
+y=1000
+y=1000
+y=1000
+x=1070
+y=1000
+y=1000
+y=1000
+y=1000
+x=1080
+y=1000
+y=1000
+y=1000
+y=1000
+x=1090
+y=1000
+y=1000
+y=1000
+y=1000
+x=1100
+z=40000
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.21:36:03
+x=1000
+y=1000
+y=1000
+y=1000
+y=1000
+x=1010
+y=1000
+y=1000
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.21:41:32
+x=1010
+y=1000
+y=1000
+y=1000
+y=1000
+x=1020
+y=1000
+y=1000
+y=1000
+y=1000
+x=1030
+y=1000
+y=1000
+y=1000
+y=1000
+x=1040
+y=1000
+y=1000
+y=1000
+y=1000
+x=1050
+y=1000
+y=1000
+y=1000
+y=1000
+x=1060
+y=1000
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.22:27:54
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.22:28:57
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.22:29:48
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.22:31:02
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.22:56:20
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.22:56:42
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.22:58:17
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.23:01:22
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.23:09:25
+x=1060
+y=1000
+y=1000
+y=1000
+y=1000
+x=1070
+y=1000
+y=1000
+y=1000
+y=1000
+x=1080
+y=1000
+y=1000
+y=1000
+y=1000
+x=1090
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.23:13:12
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.23:13:52
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.23:19:21
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.23:27:36
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.23:36:11
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.23:37:10
+Generating all combinations of z^r...
+from z = 40000
+to z = 50000
+now is 2014-02-25.23:38:54

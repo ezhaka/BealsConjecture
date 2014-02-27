@@ -1,0 +1,8 @@
+class Task
+{
+public: 
+  Task()
+  {
+
+  }
+};
