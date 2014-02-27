@@ -1,9 +1,6 @@
 #include <tuple>
 #include "ulhashHashtable.h"
 #include "logger.h"
-#include "constants.h"
-
-typedef unsigned __int64 uint64;
 
 class BealSearcher
 {

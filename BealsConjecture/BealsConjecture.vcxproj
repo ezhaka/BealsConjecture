@@ -20,14 +20,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bealhash3.cpp" />
-    <ClCompile Include="hashtable.h" />
     <ClCompile Include="ulhash3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bealSearcher.h" />
+    <ClInclude Include="constants.h" />
+    <ClInclude Include="logger.h" />
+    <ClInclude Include="savedState.h" />
     <ClInclude Include="sparsehash\densehashtable.h" />
     <ClInclude Include="sparsehash\hashtable-common.h" />
     <ClInclude Include="sparsehash\libc_allocator_with_realloc.h" />
     <ClInclude Include="sparsehash\sparsehashtable.h" />
+    <ClInclude Include="stateManager.h" />
     <ClInclude Include="ulhash3.h" />
     <ClInclude Include="ulhashHashtable.h" />
   </ItemGroup>
@@ -49,7 +53,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>Intel C++ Compiler XE 14.0</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>

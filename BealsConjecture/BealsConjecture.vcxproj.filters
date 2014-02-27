@@ -21,9 +21,6 @@
     <ClCompile Include="ulhash3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="hashtable.h">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ulhash3.h">
@@ -43,6 +40,21 @@
     </ClInclude>
     <ClInclude Include="sparsehash\sparsehashtable.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bealSearcher.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="logger.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stateManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="savedState.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

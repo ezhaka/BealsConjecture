@@ -21,7 +21,8 @@ public:
     va_start(ap, count);
     for (int j = 0; j < count; j++)
     {
-      logFile << va_arg(ap, std::string);
+      va_arg(ap, std::string);
+      logFile << ap;
     }
     va_end(ap);
 
