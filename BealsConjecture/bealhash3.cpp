@@ -5,19 +5,19 @@
 #include <string.h>
 #include <string>
 #include "ulhash3.h"
-#include <cilk\cilk.h>
+//#include <cilk\cilk.h>
 #include <time.h>
 #include "ulhashHashtable.h"
 #include <cstdio>
 
-#include <sparsehash/internal/sparseconfig.h>
-#include <config.h>
-#include <sparsehash/sparse_hash_set>
-#include <sparsehash/sparse_hash_map>
-#include <sparsehash/dense_hash_set>
-#include <sparsehash/dense_hash_map>
-#include <sparsehash/template_util.h>
-#include <sparsehash/type_traits.h>
+//#include <sparsehash/internal/sparseconfig.h>
+//#include <config.h>
+//#include <sparsehash/sparse_hash_set>
+//#include <sparsehash/sparse_hash_map>
+//#include <sparsehash/dense_hash_set>
+//#include <sparsehash/dense_hash_map>
+//#include <sparsehash/template_util.h>
+//#include <sparsehash/type_traits.h>
 
 unsigned int numCand = 0;
 
@@ -42,7 +42,7 @@ void checkSums(int fromX, int toX, int maxPow, std::tuple<UlhashHashtable, Ulhas
 std::tuple<UlhashHashtable, UlhashHashtable> genZs(uint64 from, uint64 to, uint64 maxBase, uint64 maxPow);
 
 int main(int argc, char** argv) {
-  google::dense_hash_map<int, int> dmap;
+  //google::dense_hash_map<int, int> dmap;
 
   printf("sizeof(uint64) = %d\n", sizeof(uint64));
 
@@ -52,15 +52,15 @@ int main(int argc, char** argv) {
   }
 
   if (!strcmp(argv[1], "-v")) {
-  	verbose = 1;
-  	argv++;
+    verbose = 1;
+    argv++;
   }
-  
+
   if (!strcmp(argv[1], "-a")) {
-  	useGcd = 0;
-  	argv++;
+    useGcd = 0;
+    argv++;
   }
-  
+
   int fromX = atol(argv[1]);
   int toX = atol(argv[2]);
 
@@ -82,7 +82,7 @@ int main(int argc, char** argv) {
 
     printf("Done. Searching for candidates...\n");
     checkSums(z == fromZ ? savedX : fromX, toX, maxPow, hashtables);
-  
+
     std::get<0>(hashtables).free();
     std::get<1>(hashtables).free();
 
@@ -94,11 +94,11 @@ int main(int argc, char** argv) {
 
 uint64 modularPow(uint64 base, uint64 pow, uint64 modulo)
 {
-	uint64 result = (base*base) % modulo;
-		
-	for (int m=2; m<=pow; m++) {
+  uint64 result = (base*base) % modulo;
+
+  for (int m = 2; m <= pow; m++) {
     result = (result * base) % modulo;
-	}
+  }
 
   return result;
 }
@@ -131,81 +131,81 @@ void checkValues(uint64 x, uint64 m, uint64 y, uint64 n, std::vector<std::tuple<
 // Check each x^m + y^n w/ gcd(m,n)==1 for inclusion in the trie
 // Output each as a candidate if it matches.
 void checkSums(int fromX, int toX, int maxPow, std::tuple<UlhashHashtable, UlhashHashtable> hashtables) {
-	unsigned int x, y, m, n;
+  unsigned int x, y, m, n;
   startTimer();
 
   UlhashHashtable hp1 = std::get<0>(hashtables);
   UlhashHashtable hp2 = std::get<1>(hashtables);
-	
- 	for (x=fromX; x<=toX; x++) {
-		for (y = 2; y<=x; y++) {
-			if (useGcd && gcd(x,y) != 1) continue;
+
+  for (x = fromX; x <= toX; x++) {
+    for (y = 2; y <= x; y++) {
+      if (useGcd && gcd(x, y) != 1) continue;
 
       // compute modular powers here
-		  uint64* pxp1 = new uint64 [maxPow-3+1];
-		  uint64* pxp2 = new uint64 [maxPow-3+1];
-      uint64* pyp1 = new uint64 [maxPow-3+1];
-		  uint64* pyp2 = new uint64 [maxPow-3+1];
-		  uint64 powxp1 = (x*x) % largeP1;
-		  uint64 powxp2 = (x*x) % largeP2;
+      uint64* pxp1 = new uint64[maxPow - 3 + 1];
+      uint64* pxp2 = new uint64[maxPow - 3 + 1];
+      uint64* pyp1 = new uint64[maxPow - 3 + 1];
+      uint64* pyp2 = new uint64[maxPow - 3 + 1];
+      uint64 powxp1 = (x*x) % largeP1;
+      uint64 powxp2 = (x*x) % largeP2;
       uint64 powyp1 = (y*y) % largeP1;
-		  uint64 powyp2 = (y*y) % largeP2;
-		
-		  for (int m=2; m<=maxPow; m++) {
+      uint64 powyp2 = (y*y) % largeP2;
+
+      for (int m = 2; m <= maxPow; m++) {
         int minPow = 3;
 
         if (m >= minPow) {
-			    pxp1[m-minPow] = powxp1;
-			    pxp2[m-minPow] = powxp2;
-          pyp1[m-minPow] = powyp1;
-			    pyp2[m-minPow] = powyp2;
+          pxp1[m - minPow] = powxp1;
+          pxp2[m - minPow] = powxp2;
+          pyp1[m - minPow] = powyp1;
+          pyp2[m - minPow] = powyp2;
         }
 
         powxp1 = (powxp1 * x) % largeP1;
-			  powxp2 = (powxp2 * x) % largeP2;
+        powxp2 = (powxp2 * x) % largeP2;
         powyp1 = (powyp1 * x) % largeP1;
-			  powyp2 = (powyp2 * x) % largeP2;
-		  }
+        powyp2 = (powyp2 * x) % largeP2;
+      }
 
-			for (m = 3; m <= maxPow; m++) {
-				for (n = 3; n <= maxPow; n++) {
-          auto xm1 = pxp1[m-3];
-          auto yn1 = pyp1[n-3];
+      for (m = 3; m <= maxPow; m++) {
+        for (n = 3; n <= maxPow; n++) {
+          auto xm1 = pxp1[m - 3];
+          auto yn1 = pyp1[n - 3];
           auto hp1Key = (xm1 + yn1) % largeP1;
 
           if (hp1.hasKey(hp1Key)) {
-            auto xm2 = pxp2[m-3];
-            auto yn2 = pyp2[n-3];
-            auto hp2Key = (xm2 + yn2)%largeP2;
+            auto xm2 = pxp2[m - 3];
+            auto yn2 = pyp2[n - 3];
+            auto hp2Key = (xm2 + yn2) % largeP2;
 
-						if (hp2.hasKey(hp1Key)) {
+            if (hp2.hasKey(hp1Key)) {
               checkValues(x, m, y, n, hp1.getValues(hp1Key), hp2.getValues(hp2Key));
             }
-					}
-				}
-			}
+          }
+        }
+      }
 
       delete[] pxp1;
       delete[] pxp2;
       delete[] pyp1;
       delete[] pyp2;
 
-      if (!(y%1000)) {
+      if (!(y % 1000)) {
         oLogFile << "y=" << y << std::endl << std::flush;
       }
-		}
-		
-		if (!(x%10)) {
+    }
+
+    if (!(x % 10)) {
       printf("Completed x=%d\n", x);
       oLogFile << "x=" << x << std::endl << std::flush;
 
       stopTimerAndPrint();
       startTimer();
     }
-	}
+  }
 }
 
-std::tuple<UlhashHashtable, UlhashHashtable> genZs(uint64 from, uint64 to, uint64 maxBase, uint64 maxPow) 
+std::tuple<UlhashHashtable, UlhashHashtable> genZs(uint64 from, uint64 to, uint64 maxBase, uint64 maxPow)
 {
   if (verbose) printf("Generating all combinations of z^r...\n");
   oLogFile << "Generating all combinations of z^r..." << std::endl;
@@ -213,18 +213,18 @@ std::tuple<UlhashHashtable, UlhashHashtable> genZs(uint64 from, uint64 to, uint6
   oLogFile << "to z = " << to << std::endl;
   std::cout << "Generating z from " << from << " to " << to << std::endl;
   logCurrentTime();
-  
-  uint64 hashsetSize = (to-from+1)*(maxPow-3+1);
 
-  UlhashHashtable hashtable1 = UlhashHashtable(hashsetSize); 
-  UlhashHashtable hashtable2 = UlhashHashtable(hashsetSize); 
-  
-  for (uint64 z=from; z<=to; z++) {
+  uint64 hashsetSize = (to - from + 1)*(maxPow - 3 + 1);
+
+  UlhashHashtable hashtable1 = UlhashHashtable(hashsetSize);
+  UlhashHashtable hashtable2 = UlhashHashtable(hashsetSize);
+
+  for (uint64 z = from; z <= to; z++) {
     uint64 n1 = z*z;
     uint64 n2 = n1 % largeP2;
     n1 = n1 % largeP1;
-    
-    for (uint64 r=2; r<=maxPow; r++) {
+
+    for (uint64 r = 2; r <= maxPow; r++) {
       hashtable1.addValue(n1, std::make_tuple(z, r));
       hashtable2.addValue(n2, std::make_tuple(z, r));
 
@@ -232,36 +232,36 @@ std::tuple<UlhashHashtable, UlhashHashtable> genZs(uint64 from, uint64 to, uint6
       n2 = (n2*z) % largeP2;
     }
   }
-  
+
   hashtable1.optimize();
   hashtable2.optimize();
   return std::make_tuple(hashtable1, hashtable2);
 }
 
 uint64 gcd(uint64 u, uint64 v) {
-     uint64 k = 0;
-     if (u == 0)
-         return v;
-     if (v == 0)
-         return u;
-     while ((u & 1) == 0  &&  (v & 1) == 0) { /* while both u and v are even */
-         u >>= 1;   /* shift u right, dividing it by 2 */
-         v >>= 1;   /* shift v right, dividing it by 2 */
-         k++;       /* add a power of 2 to the final result */
-     }
-     /* At this point either u or v (or both) is odd */
-     do {
-         if ((u & 1) == 0)      /* if u is even */
-             u >>= 1;           /* divide u by 2 */
-         else if ((v & 1) == 0) /* else if v is even */
-             v >>= 1;           /* divide v by 2 */
-         else if (u >= v)       /* u and v are both odd */
-             u = (u-v) >> 1;
-         else                   /* u and v both odd, v > u */
-             v = (v-u) >> 1;
-     } while (u > 0);
-     return v << k;  /* returns v * 2^k */
- }
+  uint64 k = 0;
+  if (u == 0)
+    return v;
+  if (v == 0)
+    return u;
+  while ((u & 1) == 0 && (v & 1) == 0) { /* while both u and v are even */
+    u >>= 1;   /* shift u right, dividing it by 2 */
+    v >>= 1;   /* shift v right, dividing it by 2 */
+    k++;       /* add a power of 2 to the final result */
+  }
+  /* At this point either u or v (or both) is odd */
+  do {
+    if ((u & 1) == 0)      /* if u is even */
+      u >>= 1;           /* divide u by 2 */
+    else if ((v & 1) == 0) /* else if v is even */
+      v >>= 1;           /* divide v by 2 */
+    else if (u >= v)       /* u and v are both odd */
+      u = (u - v) >> 1;
+    else                   /* u and v both odd, v > u */
+      v = (v - u) >> 1;
+  } while (u > 0);
+  return v << k;  /* returns v * 2^k */
+}
 
 void startTimer()
 {
@@ -311,7 +311,7 @@ std::tuple<uint64, uint64> readLogFile(int defaultZ, int defaultX)
 
   savedZ = parseVal(zString, 2);
   savedX = parseVal(xString, 2);
-  
+
   iLogFile.close();
 
   return std::make_tuple(savedZ, savedX);
