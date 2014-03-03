@@ -1,14 +1,22 @@
 #include <tuple>
+#include <fstream>
+#include <string>
+#include <string.h>
 #include "ulhashHashtable.h"
 #include "logger.h"
 
 class BealSearcher
 {
 public:
-  std::tuple<UlhashHashtable, UlhashHashtable> genZs(uint64 from, uint64 to, uint64 maxBase, uint64 maxPow) const
+  BealSearcher()
   {
-    logger.log("from z = ", from);
-    logger.log("to z = ", to);
+    logStream.open("logfile.txt", std::ios::app);
+  }
+
+  std::tuple<UlhashHashtable, UlhashHashtable> genZs(uint64 from, uint64 to, uint64 maxBase, uint64 maxPow)
+  {
+    logStream << "from z = " << from << std::endl;
+    logStream << "to z = " << to << std::endl;
     logger.logCurrentTime();
 
     uint64 hashsetSize = (to - from + 1)*(maxPow - 3 + 1);
@@ -24,8 +32,11 @@ public:
 
       for (uint64 r = 2; r <= maxPow; r++) 
       {
-        hashtable1.addValue(n1, std::make_tuple(z, r));
-        hashtable2.addValue(n2, std::make_tuple(z, r));
+        if (r > 2)
+        {
+          hashtable1.addValue(n1, std::make_tuple(z, r));
+          hashtable2.addValue(n2, std::make_tuple(z, r));
+        }
 
         n1 = (n1*z) % constants::largeP1;
         n2 = (n2*z) % constants::largeP2;
@@ -37,7 +48,7 @@ public:
     return std::make_tuple(hashtable1, hashtable2);
   }
 
-  void checkSums(int fromX, int toX, int maxPow, std::tuple<UlhashHashtable, UlhashHashtable> hashtables) const 
+  void checkSums(int fromX, int toX, int maxPow, std::tuple<UlhashHashtable, UlhashHashtable> hashtables) 
   {
     UlhashHashtable hp1 = std::get<0>(hashtables);
     UlhashHashtable hp2 = std::get<1>(hashtables);
@@ -74,8 +85,8 @@ public:
 
           powxp1 = (powxp1 * x) % constants::largeP1;
           powxp2 = (powxp2 * x) % constants::largeP2;
-          powyp1 = (powyp1 * x) % constants::largeP1;
-          powyp2 = (powyp2 * x) % constants::largeP2;
+          powyp1 = (powyp1 * y) % constants::largeP1;
+          powyp2 = (powyp2 * y) % constants::largeP2;
         }
 
         for (int m = 3; m <= maxPow; m++) 
@@ -92,9 +103,10 @@ public:
               auto yn2 = pyp2[n - 3];
               auto hp2Key = (xm2 + yn2) % constants::largeP2;
 
-              if (hp2.hasKey(hp1Key)) 
+              if (hp2.hasKey(hp2Key)) 
               {
-                logger.log(x, "^", m, " + ", y, "^", n);
+                printf("%d^%d + %d^%d\n", x, m, y, n);
+                logStream << x << "^" << m << " + " << y << "^" << n << std::endl;
               }
             }
           }
@@ -107,20 +119,21 @@ public:
 
         if (!(y % 1000)) 
         {
-          logger.log("y=", y);
+          logStream << "y=" << y << std::endl;
         }
       }
 
       if (!(x % 10)) 
       {
         printf("Completed x=%d\n", x);
-        logger.log("x=", x);
+        logStream << "x=" << x << std::endl;
       }
     }
   }
 
 
 private:
+  std::ofstream logStream;
   Logger logger;
 
   uint64 gcd(uint64 u, uint64 v) const

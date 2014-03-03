@@ -1,5 +1,4 @@
 #include <fstream>
-#include <stdarg.h>
 #include <string>
 #include <string.h>
 #include <time.h>
@@ -10,23 +9,6 @@ public:
   Logger()
   {
     // todo: make file name const variable
-  }
-
-  void log(...) const
-  {
-    std::ofstream logFile;
-    logFile.open("logfile.txt", std::ios::app);
-    va_list ap;
-    int count;
-    va_start(ap, count);
-    for (int j = 0; j < count; j++)
-    {
-      va_arg(ap, std::string);
-      logFile << ap;
-    }
-    va_end(ap);
-
-    logFile << std::endl;
   }
 
   void logCurrentTime() const

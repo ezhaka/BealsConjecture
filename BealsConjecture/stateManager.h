@@ -23,8 +23,8 @@ public:
 
     SavedState savedState(defaultState.z, defaultState.x);
 
-    savedState.z = parseVal(zString, 2);
-    savedState.x = parseVal(xString, 2);
+    savedState.z = parseVal(zString, defaultState.z);
+    savedState.x = parseVal(xString, defaultState.x);
 
     return savedState;
   }

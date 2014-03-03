@@ -24,7 +24,7 @@
 int main(int argc, char** argv) {
   //google::dense_hash_map<int, int> dmap;
 
-  if (argc < 3) {
+  if (argc < 4) {
     fprintf(stderr, "Usage: <from x> <to x> <max power> <max base>\n", argv[0]);
     exit(1);
   }
@@ -39,10 +39,13 @@ int main(int argc, char** argv) {
   SavedState defaultState(2, fromX);
   SavedState state = stateManager.load(defaultState);
 
+  std::ofstream logStream;
+  logStream.open("logfile.txt", std::ios::app);
+
   BealSearcher bealSearcher;
   Logger logger;
 
-  int zStep = 10000;
+  int zStep = 100;
   int fromZ = state.z == 2 ? 1 : ((state.z / zStep) + 1);
 
   for (uint64 z = fromZ; z <= maxBase / zStep; z++)
@@ -56,7 +59,7 @@ int main(int argc, char** argv) {
     std::get<0>(hashtables).free();
     std::get<1>(hashtables).free();
 
-    logger.log("z=", z);
+    logStream << "z=" << (z * zStep) << std::endl;
   }
 
   //getchar();
