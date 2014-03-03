@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
   BealSearcher bealSearcher;
   Logger logger;
 
-  int zStep = 100;
+  int zStep = 10000;
   int fromZ = state.z == 2 ? 1 : ((state.z / zStep) + 1);
 
   for (uint64 z = fromZ; z <= maxBase / zStep; z++)

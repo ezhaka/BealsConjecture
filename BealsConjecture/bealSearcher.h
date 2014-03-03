@@ -4,6 +4,8 @@
 #include <string.h>
 #include "ulhashHashtable.h"
 #include "logger.h"
+#include <cilk\cilk.h>
+#include <tbb\mutex.h>
 
 class BealSearcher
 {
@@ -55,7 +57,7 @@ public:
 
     for (int x = fromX; x <= toX; x++) 
     {
-      for (int y = 2; y <= x; y++) 
+      cilk_for (int y = 2; y <= x; y++) 
       {
         if (gcd(x, y) != 1)
         {
@@ -105,8 +107,10 @@ public:
 
               if (hp2.hasKey(hp2Key)) 
               {
+                logMutex.lock();
                 printf("%d^%d + %d^%d\n", x, m, y, n);
                 logStream << x << "^" << m << " + " << y << "^" << n << std::endl;
+                logMutex.unlock();
               }
             }
           }
@@ -119,14 +123,18 @@ public:
 
         if (!(y % 1000)) 
         {
+          logMutex.lock();
           logStream << "y=" << y << std::endl;
+          logMutex.unlock();
         }
       }
 
       if (!(x % 10)) 
       {
+        logMutex.lock();
         printf("Completed x=%d\n", x);
         logStream << "x=" << x << std::endl;
+        logMutex.unlock();
       }
     }
   }
@@ -135,6 +143,7 @@ public:
 private:
   std::ofstream logStream;
   Logger logger;
+  tbb::mutex logMutex;
 
   uint64 gcd(uint64 u, uint64 v) const
   {
