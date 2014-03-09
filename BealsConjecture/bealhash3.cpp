@@ -36,31 +36,28 @@ int main(int argc, char** argv) {
   int maxPow = atol(argv[4]);
 
   StateManager stateManager;
-  SavedState defaultState(2, fromX);
+  SavedState defaultState(2, fromX, fromX, toX);
   SavedState state = stateManager.load(defaultState);
 
   std::ofstream logStream;
   logStream.open("logfile.txt", std::ios::app);
 
+  logStream << "x_from=" << state.x_from << std::endl;
+  logStream << "x_to=" << state.x_to << std::endl;
+
   BealSearcher bealSearcher;
   Logger logger;
 
-  int zStep = 10000;
-  int fromZ = state.z == 2 ? 1 : ((state.z / zStep) + 1);
-
-  for (uint64 z = fromZ; z <= maxBase / zStep; z++)
-  {
-    std::cout << "Generating z^s..." << std::endl;
-    auto hashtables = bealSearcher.genZs((z - 1) * zStep, z * zStep, maxBase, maxPow);
+  std::cout << "Generating z^s..." << std::endl;
+  auto hashtables = bealSearcher.genZs(2, 3, maxBase, maxPow);
     
-    std::cout << "Done. Searching for candidates..." << std::endl;
-    bealSearcher.checkSums(z == fromZ ? state.x : fromX, toX, maxPow, hashtables);
+  //printf("z=%d", z*zStep);
 
-    std::get<0>(hashtables).free();
-    std::get<1>(hashtables).free();
+  std::cout << "Done. Searching for candidates..." << std::endl;
+  bealSearcher.checkSums(fromX, toX, maxPow, hashtables);
 
-    logStream << "z=" << (z * zStep) << std::endl;
-  }
+  std::get<0>(hashtables).free();
+  std::get<1>(hashtables).free();
 
   //getchar();
 }

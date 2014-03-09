@@ -15,18 +15,32 @@ public:
     logStream.open("logfile.txt", std::ios::app);
   }
 
-  std::tuple<UlhashHashtable, UlhashHashtable> genZs(uint64 from, uint64 to, uint64 maxBase, uint64 maxPow)
+  std::tuple<UlhashHashtable, UlhashHashtable> genZs(uint64 minBase, uint64 minPow, uint64 maxBase, uint64 maxPow)
   {
-    logStream << "from z = " << from << std::endl;
-    logStream << "to z = " << to << std::endl;
     logger.logCurrentTime();
 
-    uint64 hashsetSize = (to - from + 1)*(maxPow - 3 + 1);
+    uint64 hashsetSize = (maxBase - minBase + 1)*(maxPow - minPow + 1);
 
     UlhashHashtable hashtable1 = UlhashHashtable(hashsetSize);
     UlhashHashtable hashtable2 = UlhashHashtable(hashsetSize);
 
-    for (uint64 z = from; z <= to; z++) 
+    bool isZ1Loaded = cilk_spawn readFromFile("zs1.txt", hashtable1);
+    bool isZ2Loaded = cilk_spawn readFromFile("zs2.txt", hashtable2);
+    cilk_sync;
+
+    if (isZ1Loaded && isZ2Loaded)
+    {
+      hashtable1.optimize();
+      hashtable2.optimize();
+      return std::make_tuple(hashtable1, hashtable2);
+    }
+
+    std::ofstream zFile1;
+    std::ofstream zFile2;
+    zFile1.open("zs1.txt", std::ios::app);
+    zFile2.open("zs2.txt", std::ios::app);
+
+    for (uint64 z = minBase; z <= maxBase; z++) 
     {
       uint64 n1 = z*z;
       uint64 n2 = n1 % constants::largeP2;
@@ -36,6 +50,9 @@ public:
       {
         if (r > 2)
         {
+          zFile1 << n1 << ";" << z << "^" << r << std::endl;
+          zFile2 << n2 << ";" << z << "^" << r << std::endl;
+
           hashtable1.addValue(n1, std::make_tuple(z, r));
           hashtable2.addValue(n2, std::make_tuple(z, r));
         }
@@ -144,6 +161,27 @@ private:
   std::ofstream logStream;
   Logger logger;
   tbb::mutex logMutex;
+
+  bool readFromFile(std::string fileName, UlhashHashtable & result)
+  {
+    std::cout << "reading from file " << fileName << "..." <<  std::endl;
+    std::ifstream zfile(fileName);
+    
+    if (!zfile.good())
+    {
+      return false;
+    }
+    
+    std::string line;
+
+    while (std::getline(zfile, line))
+    {
+      std::string num = line.substr(0, line.find(';'));
+      result.addValue(atoi(num.c_str()));
+    }
+
+    return true;
+  }
 
   uint64 gcd(uint64 u, uint64 v) const
   {

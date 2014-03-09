@@ -17,6 +17,11 @@ public:
   {
   }
   
+  void addValue(uint64 key)
+  {
+    ulhash_set(hashtable, key);
+  }
+
   void addValue(uint64 key, std::tuple<uint64, uint64> val)
   {
     ulhash_set(hashtable, key);

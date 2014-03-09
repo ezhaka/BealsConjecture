@@ -12,19 +12,25 @@ public:
     std::string line;
     std::string zString;
     std::string xString;
+    std::string fromXString;
+    std::string toXString;
 
     while (std::getline(logfile, line))
     {
       tryGetValueLine("z=", zString, line);
       tryGetValueLine("x=", xString, line);
+      tryGetValueLine("x_from=", fromXString, line);
+      tryGetValueLine("x_to=", toXString, line);
     }
 
     logfile.close();
 
-    SavedState savedState(defaultState.z, defaultState.x);
+    SavedState savedState(defaultState.z, defaultState.x, defaultState.x_from, defaultState.x_to);
 
     savedState.z = parseVal(zString, defaultState.z);
     savedState.x = parseVal(xString, defaultState.x);
+    savedState.x_to = parseVal(toXString, defaultState.x_to);
+    savedState.x_from = parseVal(fromXString, defaultState.x_from);
 
     return savedState;
   }
@@ -32,9 +38,9 @@ public:
 private:
   void tryGetValueLine(std::string varName, std::string & valLine, std::string line) const
   {
-    if (line.compare(0, 2, varName) == 0)
+    if (line.compare(0, varName.size(), varName) == 0)
     {
-      valLine = line.substr(2);
+      valLine = line.substr(varName.size());
     }
   }
 
