@@ -71,6 +71,7 @@ public:
   {
     UlhashHashtable hp1 = std::get<0>(hashtables);
     UlhashHashtable hp2 = std::get<1>(hashtables);
+    clock_t startClock = clock();
 
     for (int x = fromX; x <= toX; x++) 
     {
@@ -151,6 +152,11 @@ public:
         logMutex.lock();
         printf("Completed x=%d\n", x);
         logStream << "x=" << x << std::endl;
+
+        clock_t endClock = clock();
+        logStream << "Elapsed: " << (double)(endClock - startClock) / CLOCKS_PER_SEC << " seconds" << std::endl;
+        startClock = clock();
+
         logMutex.unlock();
       }
     }

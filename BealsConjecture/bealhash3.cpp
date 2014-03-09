@@ -5,21 +5,11 @@
 #include <string.h>
 #include <string>
 #include "ulhash3.h"
-//#include <cilk\cilk.h>
 #include <time.h>
 #include <cstdio>
 
 #include "stateManager.h"
 #include "bealSearcher.h"
-
-//#include <sparsehash/internal/sparseconfig.h>
-//#include <config.h>
-//#include <sparsehash/sparse_hash_set>
-//#include <sparsehash/sparse_hash_map>
-//#include <sparsehash/dense_hash_set>
-//#include <sparsehash/dense_hash_map>
-//#include <sparsehash/template_util.h>
-//#include <sparsehash/type_traits.h>
 
 int main(int argc, char** argv) {
   //google::dense_hash_map<int, int> dmap;
@@ -51,13 +41,11 @@ int main(int argc, char** argv) {
   std::cout << "Generating z^s..." << std::endl;
   auto hashtables = bealSearcher.genZs(2, 3, maxBase, maxPow);
     
-  //printf("z=%d", z*zStep);
-
   std::cout << "Done. Searching for candidates..." << std::endl;
-  bealSearcher.checkSums(fromX, toX, maxPow, hashtables);
+  bealSearcher.checkSums(state.x, state.x_to, maxPow, hashtables);
 
-  std::get<0>(hashtables).free();
-  std::get<1>(hashtables).free();
+  //std::get<0>(hashtables).free();
+  //std::get<1>(hashtables).free();
 
   //getchar();
 }
