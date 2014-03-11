@@ -37,8 +37,8 @@ public:
 
     std::ofstream zFile1;
     std::ofstream zFile2;
-    zFile1.open("zs1.txt", std::ios::app);
-    zFile2.open("zs2.txt", std::ios::app);
+    zFile1.open("zs1.txt");
+    zFile2.open("zs2.txt");
 
     for (uint64 z = minBase; z <= maxBase; z++) 
     {
@@ -126,7 +126,7 @@ public:
               if (hp2.hasKey(hp2Key)) 
               {
                 logMutex.lock();
-                printf("%d^%d + %d^%d\n", x, m, y, n);
+                //printf("%d^%d + %d^%d\n", x, m, y, n);
                 logStream << x << "^" << m << " + " << y << "^" << n << std::endl;
                 logMutex.unlock();
               }
@@ -138,27 +138,17 @@ public:
         delete[] pxp2;
         delete[] pyp1;
         delete[] pyp2;
-
-        if (!(y % 1000)) 
-        {
-          logMutex.lock();
-          logStream << "y=" << y << std::endl;
-          logMutex.unlock();
-        }
       }
 
-      if (!(x % 10)) 
-      {
-        logMutex.lock();
-        printf("Completed x=%d\n", x);
-        logStream << "x=" << x << std::endl;
+      logMutex.lock();
+      std::cout << "Completed x=" << x << std::endl;
+      logStream << "x=" << x << std::endl;
 
-        clock_t endClock = clock();
-        logStream << "Elapsed: " << (double)(endClock - startClock) / CLOCKS_PER_SEC << " seconds" << std::endl;
-        startClock = clock();
+      clock_t endClock = clock();
+      logStream << "Elapsed: " << (double)(endClock - startClock) / CLOCKS_PER_SEC << " seconds" << std::endl;
+      startClock = clock();
 
-        logMutex.unlock();
-      }
+      logMutex.unlock();
     }
   }
 

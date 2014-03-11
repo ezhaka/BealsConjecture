@@ -1,3 +1,4 @@
+#include "mpi.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -7,23 +8,39 @@
 #include "ulhash3.h"
 #include <time.h>
 #include <cstdio>
+#include <math.h>
 
 #include "stateManager.h"
 #include "bealSearcher.h"
 
+
 int main(int argc, char** argv) {
   //google::dense_hash_map<int, int> dmap;
 
-  if (argc < 4) {
-    fprintf(stderr, "Usage: <from x> <to x> <max power> <max base>\n", argv[0]);
+  if (argc < 2) {
+    fprintf(stderr, "Usage: <max base> <max power>\n", argv[0]);
     exit(1);
   }
 
-  int fromX = atol(argv[1]);
-  int toX = atol(argv[2]);
+  int maxBase = atol(argv[1]);
+  int maxPow = atol(argv[2]);
 
-  int maxBase = atol(argv[3]);
-  int maxPow = atol(argv[4]);
+  MPI::Status stat;
+  MPI::Init (argc, argv);
+
+  int size = MPI::COMM_WORLD.Get_size();
+  int rank = MPI::COMM_WORLD.Get_rank();
+
+  double q = 0.7;
+  int b1 = 20000;
+  int prevSum = b1 * (pow(q, rank) - 1) / (q - 1);
+  int curr = prevSum + b1 * pow(q, rank);
+
+  int fromX = prevSum;
+  int toX = curr;
+
+  std::cout << "from = " << prevSum << std::endl;
+  std::cout << "to = " << curr << std::endl;
 
   StateManager stateManager;
   SavedState defaultState(2, fromX, fromX, toX);
@@ -48,4 +65,9 @@ int main(int argc, char** argv) {
   //std::get<1>(hashtables).free();
 
   //getchar();
+
+  std::cout << rank << " finished!" << std::endl;
+
+  MPI::Finalize ();
+  return 0;
 }
