@@ -17,6 +17,8 @@
 int main(int argc, char** argv) {
   //google::dense_hash_map<int, int> dmap;
 
+  bool useMPI = false;
+
   if (argc < 2) {
     fprintf(stderr, "Usage: <max base> <max power>\n", argv[0]);
     exit(1);
@@ -25,22 +27,30 @@ int main(int argc, char** argv) {
   int maxBase = atol(argv[1]);
   int maxPow = atol(argv[2]);
 
-  MPI::Status stat;
-  MPI::Init (argc, argv);
+  int fromX;
+  int toX;
 
-  int size = MPI::COMM_WORLD.Get_size();
-  int rank = MPI::COMM_WORLD.Get_rank();
+  if (useMPI)
+  {
+    MPI::Status stat;
+    MPI::Init (argc, argv);
 
-  double q = 0.7;
-  int b1 = 20000;
-  int prevSum = b1 * (pow(q, rank) - 1) / (q - 1);
-  int curr = prevSum + b1 * pow(q, rank);
+    int size = MPI::COMM_WORLD.Get_size();
+    int rank = MPI::COMM_WORLD.Get_rank();
 
-  int fromX = prevSum;
-  int toX = curr;
+    int chunkSize = maxBase / size;
 
-  std::cout << "from = " << prevSum << std::endl;
-  std::cout << "to = " << curr << std::endl;
+    fromX = rank * chunkSize;
+    toX = fromX + chunkSize;
+  }
+  else
+  {
+    fromX = atol(argv[3]);
+    toX = atol(argv[4]);
+  }
+
+  std::cout << "from = " << fromX << std::endl;
+  std::cout << "to = " << toX << std::endl;
 
   StateManager stateManager;
   SavedState defaultState(2, fromX, fromX, toX);
@@ -66,8 +76,15 @@ int main(int argc, char** argv) {
 
   //getchar();
 
-  std::cout << rank << " finished!" << std::endl;
+  if (useMPI)
+  {
+    std::cout << MPI::COMM_WORLD.Get_rank() << " finished!" << std::endl;
+    MPI::Finalize ();
+  }
+  else
+  {
+    std::cout << "All done!" << std::endl;
+  }
 
-  MPI::Finalize ();
   return 0;
 }

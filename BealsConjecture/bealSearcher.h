@@ -53,8 +53,8 @@ public:
           zFile1 << n1 << ";" << z << "^" << r << std::endl;
           zFile2 << n2 << ";" << z << "^" << r << std::endl;
 
-          hashtable1.addValue(n1, std::make_tuple(z, r));
-          hashtable2.addValue(n2, std::make_tuple(z, r));
+          hashtable1.addValue(n1);
+          hashtable2.addValue(n2);
         }
 
         n1 = (n1*z) % constants::largeP1;
@@ -173,7 +173,7 @@ private:
     while (std::getline(zfile, line))
     {
       std::string num = line.substr(0, line.find(';'));
-      result.addValue(atoi(num.c_str()));
+      result.addValue(_strtoui64(num.c_str(), NULL, 10));
     }
 
     return true;
