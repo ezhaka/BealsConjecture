@@ -1,0 +1,21 @@
+-r
+C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture\My Inspector XE Results - BealsConjecture\r004mi2
+--access-checks
+--no-analyze-stack
+--leak-maximum=100000
+--leak-check-on-exit
+--leak-check-on-demand
+--check-resource-leaks
+--leak-check-report-reachable
+--freelist-vol=0
+--guard-zone-size=0
+--stack-depth=8
+--no-close-console
+--heartbeat=1
+--enable-memory-growth
+--
+C:\Users\mcgee\Documents\GitHub\BealsConjecture\x64\Debug\BealsConjecture.exe
+1000
+100
+100
+120

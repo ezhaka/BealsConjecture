@@ -24,8 +24,8 @@
       <result_directory.path>C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture\My Amplifier XE Results - BealsConjecture\r@@@{at}</result_directory.path>
       <launch_app.app_to_launch>C:\Users\mcgee\Documents\GitHub\BealsConjecture\x64\Debug\BealsConjecture.exe</launch_app.app_to_launch>
       <launch_app.working_folder>C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture</launch_app.working_folder>
-      <launch_app.app_parameters>-v 1000 1100 100000 100</launch_app.app_parameters>
-      <launch_app.environment_prepend>PATH=C:\Program Files (x86)\Intel\Composer XE 2013 SP1\redist\intel64\compiler;</launch_app.environment_prepend>
+      <launch_app.app_parameters>1000 100 2 1000</launch_app.app_parameters>
+      <launch_app.environment_prepend>PATH=C:\Program Files (x86)\Intel\Composer XE 2013 SP1\redist\intel64\compiler;C:\Program Files (x86)\Intel\Composer XE 2013 SP1\redist\intel64\tbb\vc10;</launch_app.environment_prepend>
       <context>
        <contextValue>
         <id>allowMultipleRuns</id>

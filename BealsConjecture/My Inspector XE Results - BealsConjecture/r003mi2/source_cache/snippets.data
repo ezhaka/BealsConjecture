@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<snippets>
+  <file name="C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture\bealSearcher.h" md5="28e934cf86380670cc14e4de782c41e3">
+    <snippet line="24">
+      <line line="21">    uint64 hashsetSize = (maxBase - minBase + 1)*(maxPow - minPow + 1);</line>
+      <line line="22"/>
+      <line line="23">    UlhashHashtable hashtable1 = UlhashHashtable(hashsetSize);</line>
+      <line line="24">    UlhashHashtable hashtable2 = UlhashHashtable(hashsetSize);</line>
+      <line line="25"/>
+    </snippet>
+  </file>
+  <file name="C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture\bealhash3.cpp" md5="96bd7ae6146d990a7de169ebb220fd27">
+    <snippet line="76">
+      <line line="73"/>
+      <line line="74">  std::cout &lt;&lt; "Generating z^s..." &lt;&lt; std::endl;</line>
+      <line line="75">  auto hashtables = bealSearcher.genZs(2, 3, maxBase, maxPow, useLogFile);</line>
+      <line line="76">    </line>
+      <line line="77">  std::cout &lt;&lt; "Done. Searching for candidates..." &lt;&lt; std::endl;</line>
+    </snippet>
+    <snippet line="81">
+      <line line="78">  bealSearcher.checkSums(state.x, state.x_to, maxPow, hashtables);</line>
+      <line line="79"/>
+      <line line="80">  std::get&lt;0&gt;(hashtables).free();</line>
+      <line line="81">  std::get&lt;1&gt;(hashtables).free();</line>
+      <line line="82"/>
+    </snippet>
+  </file>
+  <file name="C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture\ulhash3.cpp" md5="0ffb7eabf36eb45383fde27d0dcb78bb">
+    <snippet line="31">
+      <line line="28">    </line>
+      <line line="29">    r-&gt;nBuckets = size;</line>
+      <line line="30">    r-&gt;buckets = (unsigned int**) calloc( size, sizeof(int*) );</line>
+      <line line="31">    </line>
+      <line line="32">    return r;</line>
+    </snippet>
+    <snippet line="106">
+      <line line="103"/>
+      <line line="104">void ulhash_free(ulhash* t) {</line>
+      <line line="105">	for (int i=0; i&lt;t-&gt;nBuckets; i++) {</line>
+      <line line="106">		if (t-&gt;buckets[i]) free(t-&gt;buckets[i]);</line>
+      <line line="107">		free(t);</line>
+    </snippet>
+  </file>
+  <file name="C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture\ulhashHashtable.h" md5="16d6a99b3a17cfbbabb748d4f10a1fb1">
+    <snippet line="14">
+      <line line="11">  UlhashHashtable(int size)</line>
+      <line line="12">  {</line>
+      <line line="13">    hashtable = ulhash_create(size);</line>
+      <line line="14">    //hashset.rehash(size);</line>
+      <line line="15">  }</line>
+    </snippet>
+    <snippet line="48">
+      <line line="45">  void free()</line>
+      <line line="46">  {</line>
+      <line line="47">    ulhash_free(hashtable);</line>
+      <line line="48">  }</line>
+      <line line="49"/>
+    </snippet>
+  </file>
+  <file name="f:\dd\vctools\crt_bld\self_64_amd64\crt\src\crtexe.c" md5="9873b71b10ccf958469fd4aa751ecdfb">
+    <snippet line="370">
+      <line line="367">        __security_init_cookie();</line>
+      <line line="368"/>
+      <line line="369">        return __tmainCRTStartup();</line>
+      <line line="370">}</line>
+      <line line="371"/>
+    </snippet>
+    <snippet line="555">
+      <line line="552">#else  /* WPRFLAG */</line>
+      <line line="553">            __initenv = envp;</line>
+      <line line="554">            mainret = main(argc, argv, envp);</line>
+      <line line="555">#endif  /* WPRFLAG */</line>
+      <line line="556"/>
+    </snippet>
+  </file>
+  <file name="f:\dd\vctools\crt_bld\self_64_amd64\crt\src\streambuf" md5="7768f61ef78d8943c586fbef4c1b9bcf">
+    <snippet line="25">
+      <line line="22">    __CLR_OR_THIS_CALL basic_streambuf()</line>
+      <line line="23">        : _Plocale(_NEW_CRT locale)</line>
+      <line line="24">        {    // construct with no buffers</line>
+      <line line="25">        _Init();</line>
+      <line line="26">        }</line>
+    </snippet>
+  </file>
+  <file name="f:\dd\vctools\crt_bld\self_64_amd64\crt\src\xdebug" md5="ea21c6df827637fe06f4725d30cf4286">
+    <snippet line="62">
+      <line line="59">        // delete as _NORMAL_BLOCK, not _CRT_BLOCK, since we might have</line>
+      <line line="60">        // facets allocated by normal new.</line>
+      <line line="61">        free(_Ptr);</line>
+      <line line="62">        }</line>
+      <line line="63">    }</line>
+    </snippet>
+  </file>
+</snippets>

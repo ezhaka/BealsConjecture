@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<snippets>
+  <file name="f:\dd\vctools\crt_bld\self_64_amd64\crt\src\streambuf" md5="7768f61ef78d8943c586fbef4c1b9bcf">
+    <snippet line="25">
+      <line line="22">    __CLR_OR_THIS_CALL basic_streambuf()</line>
+      <line line="23">        : _Plocale(_NEW_CRT locale)</line>
+      <line line="24">        {    // construct with no buffers</line>
+      <line line="25">        _Init();</line>
+      <line line="26">        }</line>
+    </snippet>
+  </file>
+  <file name="f:\dd\vctools\crt_bld\self_64_amd64\crt\src\xdebug" md5="ea21c6df827637fe06f4725d30cf4286">
+    <snippet line="62">
+      <line line="59">        // delete as _NORMAL_BLOCK, not _CRT_BLOCK, since we might have</line>
+      <line line="60">        // facets allocated by normal new.</line>
+      <line line="61">        free(_Ptr);</line>
+      <line line="62">        }</line>
+      <line line="63">    }</line>
+    </snippet>
+  </file>
+</snippets>

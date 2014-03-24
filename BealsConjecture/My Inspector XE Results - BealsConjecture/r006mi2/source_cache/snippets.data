@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<snippets>
+  <file name="C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture\bealSearcher.h" md5="28e934cf86380670cc14e4de782c41e3">
+    <snippet line="24">
+      <line line="21">    uint64 hashsetSize = (maxBase - minBase + 1)*(maxPow - minPow + 1);</line>
+      <line line="22"/>
+      <line line="23">    UlhashHashtable hashtable1 = UlhashHashtable(hashsetSize);</line>
+      <line line="24">    UlhashHashtable hashtable2 = UlhashHashtable(hashsetSize);</line>
+      <line line="25"/>
+    </snippet>
+  </file>
+  <file name="C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture\ulhash3.cpp" md5="fe04ecb7f0d178d9cf50c1aaf327a089">
+    <snippet line="31">
+      <line line="28">    </line>
+      <line line="29">    r-&gt;nBuckets = size;</line>
+      <line line="30">    r-&gt;buckets = (unsigned int**) calloc( size, sizeof(int*) );</line>
+      <line line="31">    </line>
+      <line line="32">    return r;</line>
+    </snippet>
+  </file>
+  <file name="C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture\ulhashHashtable.h" md5="16d6a99b3a17cfbbabb748d4f10a1fb1">
+    <snippet line="14">
+      <line line="11">  UlhashHashtable(int size)</line>
+      <line line="12">  {</line>
+      <line line="13">    hashtable = ulhash_create(size);</line>
+      <line line="14">    //hashset.rehash(size);</line>
+      <line line="15">  }</line>
+    </snippet>
+  </file>
+  <file name="f:\dd\vctools\crt_bld\self_64_amd64\crt\src\streambuf" md5="7768f61ef78d8943c586fbef4c1b9bcf">
+    <snippet line="25">
+      <line line="22">    __CLR_OR_THIS_CALL basic_streambuf()</line>
+      <line line="23">        : _Plocale(_NEW_CRT locale)</line>
+      <line line="24">        {    // construct with no buffers</line>
+      <line line="25">        _Init();</line>
+      <line line="26">        }</line>
+    </snippet>
+  </file>
+  <file name="f:\dd\vctools\crt_bld\self_64_amd64\crt\src\xdebug" md5="ea21c6df827637fe06f4725d30cf4286">
+    <snippet line="62">
+      <line line="59">        // delete as _NORMAL_BLOCK, not _CRT_BLOCK, since we might have</line>
+      <line line="60">        // facets allocated by normal new.</line>
+      <line line="61">        free(_Ptr);</line>
+      <line line="62">        }</line>
+      <line line="63">    }</line>
+    </snippet>
+  </file>
+</snippets>

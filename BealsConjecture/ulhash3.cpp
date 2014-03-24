@@ -103,10 +103,14 @@ unsigned int ulhash_count(ulhash* t) {
 }
 
 void ulhash_free(ulhash* t) {
+  printf("t->nBuckets = %d", t->nBuckets);
+
 	for (int i=0; i<t->nBuckets; i++) {
 		if (t->buckets[i]) free(t->buckets[i]);
-		free(t);
 	}
+
+  free(t->buckets);
+	free(t);
 }
 
 
