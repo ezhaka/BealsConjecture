@@ -25,6 +25,7 @@
   <ItemGroup>
     <ClInclude Include="bealSearcher.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="helper.h" />
     <ClInclude Include="logger.h" />
     <ClInclude Include="savedState.h" />
     <ClInclude Include="sparsehash\densehashtable.h" />

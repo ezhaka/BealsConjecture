@@ -11,7 +11,7 @@
  </rdmgr>
  <All_Configurations-All_Platforms>
   <analysis_type_settings>
-   <selected_analysis_type_path>C:\Program Files (x86)\Intel\Inspector XE 2013\config\analysis_type\mi2.cfg</selected_analysis_type_path>
+   <selected_analysis_type_path>C:\Program Files (x86)\Intel\Inspector XE 2013\config\analysis_type\ti2.cfg</selected_analysis_type_path>
   </analysis_type_settings>
   <target_settings>
    <result_pattern>r@@@{at}</result_pattern>
@@ -20,9 +20,11 @@
      <workload>
       <targetName>launch</targetName>
       <result_directory.path>C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture\My Inspector XE Results - BealsConjecture\r@@@{at}</result_directory.path>
+      <enable_app_output_log type="bool">false</enable_app_output_log>
+      <project_id>{CBC55869-76F1-468E-A845-4F6ECE00F006}</project_id>
       <launch_app.app_to_launch>C:\Users\mcgee\Documents\GitHub\BealsConjecture\x64\Debug\BealsConjecture.exe</launch_app.app_to_launch>
       <launch_app.working_folder>C:\Users\mcgee\Documents\GitHub\BealsConjecture\BealsConjecture</launch_app.working_folder>
-      <launch_app.app_parameters>1000 100 100 120</launch_app.app_parameters>
+      <launch_app.app_parameters>1000 100 100 130</launch_app.app_parameters>
       <launch_app.environment_prepend>PATH=C:\Program Files (x86)\Intel\Composer XE 2013 SP1\redist\intel64\compiler;C:\Program Files (x86)\Intel\Composer XE 2013 SP1\redist\intel64\tbb\vc10;</launch_app.environment_prepend>
       <search_directories>
        <item>
@@ -32,6 +34,7 @@
         <value>sym=C:/Users/mcgee/Documents/GitHub/BealsConjecture</value>
        </item>
       </search_directories>
+      <exclude_modules type="bag"/>
       <context>
        <contextValue>
         <id>appdebug</id>
@@ -77,6 +80,6 @@
  </All_Configurations-All_Platforms>
  <debugger_settings>
   <debugger_mode>off</debugger_mode>
-  <at_cliname>mi2</at_cliname>
+  <at_cliname>ti2</at_cliname>
  </debugger_settings>
 </root>

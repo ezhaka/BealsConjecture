@@ -213,3 +213,12 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+
+###########
+## Custom
+###########
+
+*.txt
+My Amplifier XE Results - BealsConjecture/
+My Inspector XE Results - BealsConjecture/

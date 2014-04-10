@@ -56,6 +56,9 @@
     <ClInclude Include="savedState.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="helper.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="dense_hash_map">
