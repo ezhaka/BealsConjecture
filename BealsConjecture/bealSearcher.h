@@ -28,8 +28,8 @@ public:
 
     if (useLogFile)
     {
-      bool isZ1Loaded = cilk_spawn readFromFile("zs1.txt", hashtable1);
-      bool isZ2Loaded = cilk_spawn readFromFile("zs2.txt", hashtable2);
+      isZ1Loaded = cilk_spawn readFromFile("zs1.txt", hashtable1);
+      isZ2Loaded = cilk_spawn readFromFile("zs2.txt", hashtable2);
       cilk_sync;
     }
 
@@ -78,9 +78,9 @@ public:
     UlhashHashtable hp2 = std::get<1>(hashtables);
     clock_t startClock = clock();
 
-    for (int x = fromX; x <= toX; x++) 
+    for (uint64 x = fromX; x <= toX; x++) 
     {
-      cilk_for (int y = 2; y <= x; y++) 
+      cilk_for (uint64 y = 2; y <= x; y++) 
       {
         if (gcd(x, y) != 1)
         {
@@ -96,9 +96,9 @@ public:
         uint64 powyp1 = (y*y) % constants::largeP1;
         uint64 powyp2 = (y*y) % constants::largeP2;
 
-        for (int m = 2; m <= maxPow; m++) 
+        for (uint64 m = 2; m <= maxPow; m++) 
         {
-          int minPow = 3;
+          uint64 minPow = 3;
 
           if (m >= minPow) 
           {
@@ -114,9 +114,9 @@ public:
           powyp2 = (powyp2 * y) % constants::largeP2;
         }
 
-        for (int m = 3; m <= maxPow; m++) 
+        for (uint64 m = 3; m <= maxPow; m++) 
         {
-          for (int n = 3; n <= maxPow; n++) 
+          for (uint64 n = 3; n <= maxPow; n++) 
           {
             auto xm1 = pxp1[m - 3];
             auto yn1 = pyp1[n - 3];

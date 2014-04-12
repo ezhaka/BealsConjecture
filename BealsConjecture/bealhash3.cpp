@@ -16,8 +16,8 @@
 int main(int argc, char** argv) {
   //google::dense_hash_map<int, int> dmap;
 
-  bool useMPI = false;
-  bool useLogFile = false;
+  bool useMPI = true;
+  bool useLogFile = true;
 
   if (argc < 2) {
     fprintf(stderr, "Usage: <max base> <max power>\n", argv[0]);
