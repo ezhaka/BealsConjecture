@@ -13,6 +13,20 @@
 #include "stateManager.h"
 #include "bealSearcher.h"
 
+std::tuple<int, int> getRange(int rank, int size, int xm)
+{
+  double xmax = (double)xm;
+
+  double k = 4.0 / xmax;
+  double v = sqrt(2.0 / k);
+  double y10k = k * xmax * xmax / 2;
+  double chunk = y10k / (double)size;
+  double fromX = v * sqrt((double)rank * chunk);
+  double toX = v * sqrt(((double)rank + 1.0) * chunk);
+
+  return std::make_tuple<int, int>((int)fromX, (int)toX);
+}
+
 int main(int argc, char** argv) {
   //google::dense_hash_map<int, int> dmap;
 
@@ -37,11 +51,10 @@ int main(int argc, char** argv) {
 
     int size = MPI::COMM_WORLD.Get_size();
     int rank = MPI::COMM_WORLD.Get_rank();
+    auto range = getRange(rank, size, maxBase);
 
-    int chunkSize = maxBase / size;
-
-    fromX = rank * chunkSize;
-    toX = fromX + chunkSize;
+    fromX = std::get<0>(range);
+    toX = std::get<1>(range);
   }
   else
   {
