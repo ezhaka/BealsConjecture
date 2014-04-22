@@ -1,8 +1,0 @@
-class Task
-{
-public: 
-  Task()
-  {
-
-  }
-};
